@@ -38,12 +38,14 @@ model Booking {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  password  String
-  name      String
-  role      String    @default("customer") // customer, admin
-  bookings  Booking[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id                    String    @id @default(uuid())
+  email                 String    @unique
+  password              String
+  name                  String
+  role                  String    @default("customer") // customer, admin
+  resetToken           String?   @unique
+  resetTokenExpiresAt  DateTime?
+  bookings             Booking[]
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 }
