@@ -2,7 +2,7 @@
   import '../app.css';
   import { page } from '$app/stores';
   import { signOut } from '$lib/auth';
-  import { goto } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   
   let isMenuOpen = false;
   
@@ -17,7 +17,8 @@
 
   async function handleSignOut() {
     await signOut();
-    goto('/');
+    await invalidateAll(); // Invalidate all page data
+    await goto('/');
   }
 </script>
 
@@ -51,7 +52,12 @@
         <div class="hidden sm:ml-6 sm:flex sm:items-center">
           {#if user}
             <div class="ml-3 relative flex items-center space-x-4">
-              <span class="text-sm text-gray-700">Welcome, {user.name}</span>
+              <a
+                href="/profile"
+                class="text-sm text-gray-700 hover:text-gray-900"
+              >
+                Welcome, {user.name}
+              </a>
               <button
                 type="button"
                 on:click={handleSignOut}
@@ -160,6 +166,12 @@
               </div>
             </div>
             <div class="mt-3 space-y-1">
+              <a
+                href="/profile"
+                class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+              >
+                Edit Profile
+              </a>
               <button
                 type="button"
                 on:click={handleSignOut}

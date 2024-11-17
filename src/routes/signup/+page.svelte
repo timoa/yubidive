@@ -2,6 +2,8 @@
   import { signUp } from '$lib/auth';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
+  import { validatePassword } from '$lib/validation';
+  import PasswordStrengthIndicator from '$lib/components/PasswordStrengthIndicator.svelte';
 
   let email = '';
   let password = '';
@@ -21,8 +23,9 @@
   $: emailError = touched.email && !email ? 'Email is required' :
     touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Invalid email format' : '';
 
+  $: passwordValidation = validatePassword(password);
   $: passwordError = touched.password && !password ? 'Password is required' :
-    touched.password && password.length < 8 ? 'Password must be at least 8 characters' : '';
+    touched.password && !passwordValidation.isValid ? passwordValidation.errors[0] : '';
 
   $: confirmPasswordError = touched.confirmPassword && !confirmPassword ? 'Please confirm your password' :
     touched.confirmPassword && password !== confirmPassword ? 'Passwords do not match' : '';
@@ -30,7 +33,8 @@
   $: nameError = touched.name && !name ? 'Name is required' : '';
 
   $: isValid = email && password && confirmPassword && name &&
-    !emailError && !passwordError && !confirmPasswordError && !nameError;
+    !emailError && !passwordError && !confirmPasswordError && !nameError &&
+    passwordValidation.isValid;
 
   function handleBlur(field: keyof typeof touched) {
     touched[field] = true;
@@ -150,7 +154,7 @@
           >
             Password
           </label>
-          <div class="mt-1">
+          <div class="mt-1 space-y-2">
             <input
               id="password"
               name="password"
@@ -161,6 +165,7 @@
               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm
                 {passwordError ? 'border-red-300' : ''}"
             />
+            <PasswordStrengthIndicator {password} showDetails={touched.password} />
             {#if passwordError}
               <p class="mt-2 text-sm text-red-600">{passwordError}</p>
             {/if}

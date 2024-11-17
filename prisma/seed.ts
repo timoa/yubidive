@@ -11,8 +11,8 @@ async function main() {
     update: {},
     create: {
       email: 'admin@yubidive.com',
-      name: 'Admin User',
       password: adminPassword,
+      name: 'Admin User',
       role: 'admin'
     }
   });
@@ -24,8 +24,8 @@ async function main() {
     update: {},
     create: {
       email: 'customer@example.com',
-      name: 'Test Customer',
       password: customerPassword,
+      name: 'Test Customer',
       role: 'customer'
     }
   });
@@ -39,7 +39,7 @@ async function main() {
       name: 'Sea Explorer',
       capacity: 12,
       description: 'Perfect for group dives, equipped with modern diving facilities.',
-      imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5'
+      imageUrl: 'https://images.unsplash.com/photo-1559076948-cbd206bc0b13'
     }
   });
 
@@ -51,11 +51,11 @@ async function main() {
       name: 'Reef Diver',
       capacity: 8,
       description: 'Ideal for smaller groups and specialized diving experiences.',
-      imageUrl: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7'
+      imageUrl: 'https://images.unsplash.com/photo-1622567817558-3eac5d13fa86'
     }
   });
 
-  // Create sample bookings
+  // Create a booking
   const booking1 = await prisma.booking.upsert({
     where: { id: 'a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c8d' },
     update: {},

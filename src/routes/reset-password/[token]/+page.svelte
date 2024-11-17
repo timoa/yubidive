@@ -1,6 +1,8 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
+  import { validatePassword } from '$lib/validation';
+  import PasswordStrengthIndicator from '$lib/components/PasswordStrengthIndicator.svelte';
 
   let password = '';
   let confirmPassword = '';
@@ -14,13 +16,14 @@
     confirmPassword: false
   };
 
+  $: passwordValidation = validatePassword(password);
   $: passwordError = touched.password && !password ? 'Password is required' :
-    touched.password && password.length < 8 ? 'Password must be at least 8 characters' : '';
+    touched.password && !passwordValidation.isValid ? passwordValidation.errors[0] : '';
 
   $: confirmPasswordError = touched.confirmPassword && !confirmPassword ? 'Please confirm your password' :
     touched.confirmPassword && password !== confirmPassword ? 'Passwords do not match' : '';
 
-  $: isValid = password && confirmPassword && !passwordError && !confirmPasswordError;
+  $: isValid = password && confirmPassword && !passwordError && !confirmPasswordError && passwordValidation.isValid;
 
   function handleBlur(field: keyof typeof touched) {
     touched[field] = true;
@@ -140,7 +143,7 @@
             >
               New password
             </label>
-            <div class="mt-1">
+            <div class="mt-1 space-y-2">
               <input
                 id="password"
                 name="password"
@@ -151,6 +154,7 @@
                 class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm
                   {passwordError ? 'border-red-300' : ''}"
               />
+              <PasswordStrengthIndicator {password} showDetails={touched.password} />
               {#if passwordError}
                 <p class="mt-2 text-sm text-red-600">{passwordError}</p>
               {/if}
