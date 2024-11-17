@@ -2,7 +2,13 @@
 
 Simple Scuba dive bookings app.
 
-The app is based on SvelteKit and TailwindCSS.
+## Project goal
+
+The goal is to make an app that will help Suba clubs to manage their Scuba bookings. More features will come later.
+
+Also, make it runs on a free tier environment like Cloudflare Pages, Vercel or Netlify.
+
+The app is currently based on SvelteKit and TailwindCSS.
 
 > Note: This project is still in (very) early development.
 
