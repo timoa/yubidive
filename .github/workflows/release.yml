@@ -1,0 +1,81 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Setup Git Identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Analyze Commits and Update Version
+        run: |
+          # Get all commits since last tag
+          COMMITS=$(git log $(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD --pretty=format:"%s")
+
+          # Determine version bump type
+          BUMP_TYPE="none"
+          while IFS= read -r commit; do
+            if echo "$commit" | grep -q "^BREAKING CHANGE" || echo "$commit" | grep -q "^[a-zA-Z]\+!:"; then
+              BUMP_TYPE="major"
+              break
+            elif echo "$commit" | grep -q "^feat" && [ "$BUMP_TYPE" != "major" ]; then
+              BUMP_TYPE="minor"
+            elif echo "$commit" | grep -q "^fix" && [ "$BUMP_TYPE" = "none" ]; then
+              BUMP_TYPE="patch"
+            fi
+          done <<< "$COMMITS"
+
+          # Run appropriate release command if needed
+          if [ "$BUMP_TYPE" != "none" ]; then
+            pnpm run release:$BUMP_TYPE
+          fi
+
+      - name: Push changes
+        run: |
+          git push --follow-tags origin main

@@ -13,26 +13,25 @@
     error = '';
 
     const result = await signIn(email, password);
-    
+
     if (result.success) {
       await invalidateAll(); // Invalidate all page data to refresh navigation
       // Get the redirectTo parameter or use default based on user role
-      const redirectTo = $page.url.searchParams.get('redirectTo') || 
+      const redirectTo =
+        $page.url.searchParams.get('redirectTo') ||
         (result.user?.role === 'admin' ? '/backend/bookings' : '/members/boats');
       goto(redirectTo);
     } else {
       error = result.error?.message || 'An error occurred';
     }
-    
+
     loading = false;
   }
 </script>
 
 <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-      Sign in to YubiDive
-    </h2>
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to YubiDive</h2>
     <p class="mt-2 text-center text-sm text-gray-600">
       Or
       <a href="/signup" class="font-medium text-primary-600 hover:text-primary-500">
@@ -49,7 +48,11 @@
             <div class="flex">
               <div class="flex-shrink-0">
                 <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd"
+                  />
                 </svg>
               </div>
               <div class="ml-3">
@@ -60,9 +63,7 @@
         {/if}
 
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">
-            Email address
-          </label>
+          <label for="email" class="block text-sm font-medium text-gray-700"> Email address </label>
           <div class="mt-1">
             <input
               id="email"
@@ -77,9 +78,7 @@
         </div>
 
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">
-            Password
-          </label>
+          <label for="password" class="block text-sm font-medium text-gray-700"> Password </label>
           <div class="mt-1">
             <input
               id="password"

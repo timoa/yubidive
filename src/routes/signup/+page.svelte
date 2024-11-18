@@ -20,20 +20,39 @@
     name: false
   };
 
-  $: emailError = touched.email && !email ? 'Email is required' :
-    touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Invalid email format' : '';
+  $: emailError =
+    touched.email && !email
+      ? 'Email is required'
+      : touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        ? 'Invalid email format'
+        : '';
 
   $: passwordValidation = validatePassword(password);
-  $: passwordError = touched.password && !password ? 'Password is required' :
-    touched.password && !passwordValidation.isValid ? passwordValidation.errors[0] : '';
+  $: passwordError =
+    touched.password && !password
+      ? 'Password is required'
+      : touched.password && !passwordValidation.isValid
+        ? passwordValidation.errors[0]
+        : '';
 
-  $: confirmPasswordError = touched.confirmPassword && !confirmPassword ? 'Please confirm your password' :
-    touched.confirmPassword && password !== confirmPassword ? 'Passwords do not match' : '';
+  $: confirmPasswordError =
+    touched.confirmPassword && !confirmPassword
+      ? 'Please confirm your password'
+      : touched.confirmPassword && password !== confirmPassword
+        ? 'Passwords do not match'
+        : '';
 
   $: nameError = touched.name && !name ? 'Name is required' : '';
 
-  $: isValid = email && password && confirmPassword && name &&
-    !emailError && !passwordError && !confirmPasswordError && !nameError &&
+  $: isValid =
+    email &&
+    password &&
+    confirmPassword &&
+    name &&
+    !emailError &&
+    !passwordError &&
+    !confirmPasswordError &&
+    !nameError &&
     passwordValidation.isValid;
 
   function handleBlur(field: keyof typeof touched) {
@@ -47,28 +66,24 @@
     error = '';
 
     const result = await signUp(email, password, name);
-    
+
     if (result.success) {
       const redirectTo = $page.url.searchParams.get('redirectTo') || '/boats';
       goto(redirectTo);
     } else {
       error = result.error?.message || 'An error occurred';
     }
-    
+
     loading = false;
   }
 </script>
 
 <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-      Create your account
-    </h2>
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
     <p class="mt-2 text-center text-sm text-gray-600">
       Already have an account?
-      <a href="/signin" class="font-medium text-primary-600 hover:text-primary-500">
-        Sign in
-      </a>
+      <a href="/signin" class="font-medium text-primary-600 hover:text-primary-500"> Sign in </a>
     </p>
   </div>
 
@@ -79,11 +94,7 @@
           <div class="rounded-md bg-red-50 p-4">
             <div class="flex">
               <div class="flex-shrink-0">
-                <svg
-                  class="h-5 w-5 text-red-400"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
+                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                   <path
                     fill-rule="evenodd"
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
@@ -99,12 +110,7 @@
         {/if}
 
         <div>
-          <label
-            for="name"
-            class="block text-sm font-medium text-gray-700"
-          >
-            Full name
-          </label>
+          <label for="name" class="block text-sm font-medium text-gray-700"> Full name </label>
           <div class="mt-1">
             <input
               id="name"
@@ -123,12 +129,7 @@
         </div>
 
         <div>
-          <label
-            for="email"
-            class="block text-sm font-medium text-gray-700"
-          >
-            Email address
-          </label>
+          <label for="email" class="block text-sm font-medium text-gray-700"> Email address </label>
           <div class="mt-1">
             <input
               id="email"
@@ -148,12 +149,7 @@
         </div>
 
         <div>
-          <label
-            for="password"
-            class="block text-sm font-medium text-gray-700"
-          >
-            Password
-          </label>
+          <label for="password" class="block text-sm font-medium text-gray-700"> Password </label>
           <div class="mt-1 space-y-2">
             <input
               id="password"
@@ -173,10 +169,7 @@
         </div>
 
         <div>
-          <label
-            for="confirm-password"
-            class="block text-sm font-medium text-gray-700"
-          >
+          <label for="confirm-password" class="block text-sm font-medium text-gray-700">
             Confirm password
           </label>
           <div class="mt-1">

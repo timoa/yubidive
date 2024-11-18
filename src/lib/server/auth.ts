@@ -5,7 +5,7 @@ import { logger } from './logger';
 export function encryptPassword(password: string): string {
   try {
     logger.debug('Starting password encryption');
-    
+
     if (!ENCRYPTION_KEY) {
       logger.error('Encryption key not found');
       throw new Error('ENCRYPTION_KEY is not set in environment variables');

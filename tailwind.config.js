@@ -15,7 +15,7 @@ export default {
           700: '#0369a1',
           800: '#075985',
           900: '#0c4a6e',
-          950: '#082f49',
+          950: '#082f49'
         },
         secondary: {
           50: '#f8fafc',
@@ -28,33 +28,33 @@ export default {
           700: '#334155',
           800: '#1e293b',
           900: '#0f172a',
-          950: '#020617',
-        },
+          950: '#020617'
+        }
       },
       animation: {
         'fade-in': 'fade-in 0.5s ease-out',
         'fade-in-up': 'fade-in-up 0.5s ease-out',
-        'slide-in-right': 'slide-in-right 0.5s ease-out',
+        'slide-in-right': 'slide-in-right 0.5s ease-out'
       },
       keyframes: {
         'fade-in': {
           '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+          '100%': { opacity: '1' }
         },
         'fade-in-up': {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
         },
         'slide-in-right': {
           '0%': { transform: 'translateX(100%)' },
-          '100%': { transform: 'translateX(0)' },
-        },
-      },
-    },
+          '100%': { transform: 'translateX(0)' }
+        }
+      }
+    }
   },
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/aspect-ratio'),
-    require('tailwindcss-animate'),
-  ],
-}
+    require('tailwindcss-animate')
+  ]
+};

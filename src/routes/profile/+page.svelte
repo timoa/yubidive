@@ -31,19 +31,31 @@
     confirmPassword: false
   };
 
-  $: emailError = touched.email && !email ? 'Email is required' :
-    touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Invalid email format' : '';
+  $: emailError =
+    touched.email && !email
+      ? 'Email is required'
+      : touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        ? 'Invalid email format'
+        : '';
 
   $: nameError = touched.name && !name ? 'Name is required' : '';
 
   $: passwordValidation = validatePassword(newPassword);
-  $: newPasswordError = touched.newPassword && newPassword && !passwordValidation.isValid ? 
-    passwordValidation.errors[0] : '';
+  $: newPasswordError =
+    touched.newPassword && newPassword && !passwordValidation.isValid
+      ? passwordValidation.errors[0]
+      : '';
 
-  $: confirmPasswordError = touched.confirmPassword && newPassword && confirmPassword !== newPassword ? 
-    'Passwords do not match' : '';
+  $: confirmPasswordError =
+    touched.confirmPassword && newPassword && confirmPassword !== newPassword
+      ? 'Passwords do not match'
+      : '';
 
-  $: isValid = name && email && !emailError && !nameError &&
+  $: isValid =
+    name &&
+    email &&
+    !emailError &&
+    !nameError &&
     (!newPassword || (passwordValidation.isValid && confirmPassword === newPassword));
 
   function handleBlur(field: keyof typeof touched) {
@@ -61,14 +73,14 @@
       const response = await fetch('/api/auth/profile', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           name,
           email,
           currentPassword: currentPassword || undefined,
           newPassword: newPassword || undefined
-        }),
+        })
       });
 
       const data = await response.json();
@@ -98,9 +110,7 @@
 
 <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-      Edit Profile
-    </h2>
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Edit Profile</h2>
   </div>
 
   <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -110,7 +120,11 @@
           <div class="flex">
             <div class="flex-shrink-0">
               <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </div>
             <div class="ml-3">
@@ -125,7 +139,11 @@
           <div class="flex">
             <div class="flex-shrink-0">
               <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </div>
             <div class="ml-3">
@@ -137,9 +155,7 @@
 
       <form class="space-y-6" on:submit|preventDefault={handleSubmit}>
         <div>
-          <label for="name" class="block text-sm font-medium text-gray-700">
-            Full name
-          </label>
+          <label for="name" class="block text-sm font-medium text-gray-700"> Full name </label>
           <div class="mt-1">
             <input
               id="name"
@@ -158,9 +174,7 @@
         </div>
 
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">
-            Email address
-          </label>
+          <label for="email" class="block text-sm font-medium text-gray-700"> Email address </label>
           <div class="mt-1">
             <input
               id="email"

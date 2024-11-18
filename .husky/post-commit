@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Get the latest commit message
+COMMIT_MSG=$(git log -1 --pretty=%B)
+
+# Function to detect version bump type based on commit message
+detect_bump_type() {
+    if echo "$1" | grep -q "^BREAKING CHANGE" || echo "$1" | grep -q "^[a-zA-Z]\+!:"; then
+        echo "major"
+    elif echo "$1" | grep -q "^feat"; then
+        echo "minor"
+    elif echo "$1" | grep -q "^fix"; then
+        echo "patch"
+    else
+        echo "none"
+    fi
+}
+
+# Get the bump type
+BUMP_TYPE=$(detect_bump_type "$COMMIT_MSG")
+
+# If it's a version bump commit, skip
+if echo "$COMMIT_MSG" | grep -q "^chore(release)"; then
+    exit 0
+fi
+
+# If we need to bump version
+if [ "$BUMP_TYPE" != "none" ]; then
+    # Stage the changes
+    git add CHANGELOG.md package.json
+    
+    # Create a version bump commit
+    git commit --no-verify -m "chore(release): bump version [skip ci]"
+fi

@@ -33,7 +33,7 @@ const authorizationCheck: Handle = async ({ event, resolve }) => {
   const pathname = event.url.pathname;
 
   // Check if the current path needs protection
-  const protection = protectedPaths.find(p => {
+  const protection = protectedPaths.find((p) => {
     const pathParts = p.path.split('/');
     const currentParts = pathname.split('/');
     // Match the first two parts of the path (e.g., /members/boats)

@@ -9,7 +9,10 @@ interface AuthUser {
 }
 
 export class AuthError extends Error {
-  constructor(message: string, public code: string) {
+  constructor(
+    message: string,
+    public code: string
+  ) {
     super(message);
     this.name = 'AuthError';
   }
@@ -19,7 +22,7 @@ export const user = writable<AuthUser | null>(null);
 
 export function isAuthenticated(): boolean {
   let authenticated = false;
-  user.subscribe(value => {
+  user.subscribe((value) => {
     authenticated = value !== null;
   })();
   return authenticated;
@@ -27,7 +30,7 @@ export function isAuthenticated(): boolean {
 
 export function hasRole(requiredRole: 'customer' | 'admin'): boolean {
   let hasRequiredRole = false;
-  user.subscribe(value => {
+  user.subscribe((value) => {
     if (value && requiredRole === 'customer') {
       hasRequiredRole = true;
     } else if (value && value.role === requiredRole) {
@@ -37,14 +40,17 @@ export function hasRole(requiredRole: 'customer' | 'admin'): boolean {
   return hasRequiredRole;
 }
 
-export async function signIn(email: string, password: string): Promise<{ success: boolean; error?: AuthError; user?: AuthUser }> {
+export async function signIn(
+  email: string,
+  password: string
+): Promise<{ success: boolean; error?: AuthError; user?: AuthUser }> {
   try {
     const response = await fetch('/api/auth/signin', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password })
     });
 
     const data = await response.json();
@@ -57,7 +63,7 @@ export async function signIn(email: string, password: string): Promise<{ success
       id: data.user.id,
       email: data.user.email,
       name: data.user.name,
-      role: data.user.role,
+      role: data.user.role
     };
 
     user.set(userData);
@@ -66,7 +72,10 @@ export async function signIn(email: string, password: string): Promise<{ success
     if (err instanceof AuthError) {
       return { success: false, error: err };
     }
-    return { success: false, error: new AuthError('An unexpected error occurred', 'UNKNOWN_ERROR') };
+    return {
+      success: false,
+      error: new AuthError('An unexpected error occurred', 'UNKNOWN_ERROR')
+    };
   }
 }
 
@@ -79,9 +88,9 @@ export async function signUp(
     const response = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email, password, name }),
+      body: JSON.stringify({ email, password, name })
     });
 
     const data = await response.json();
@@ -95,7 +104,10 @@ export async function signUp(
     if (err instanceof AuthError) {
       return { success: false, error: err };
     }
-    return { success: false, error: new AuthError('An unexpected error occurred', 'UNKNOWN_ERROR') };
+    return {
+      success: false,
+      error: new AuthError('An unexpected error occurred', 'UNKNOWN_ERROR')
+    };
   }
 }
 

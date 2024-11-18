@@ -35,7 +35,9 @@
             src="https://images.unsplash.com/photo-1580019542155-247062e19ce4?ixlib=rb-1.2.1&auto=format&fit=crop&w=2378&q=80"
             alt="Diving boat in crystal clear water"
           />
-          <div class="absolute inset-0 bg-gradient-to-r from-primary-800 to-primary-700 mix-blend-multiply" />
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-primary-800 to-primary-700 mix-blend-multiply"
+          />
         </div>
         <div class="relative px-4 py-32 sm:px-6 sm:py-40 lg:py-48 lg:px-8">
           <h1 class="text-center text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
@@ -43,8 +45,8 @@
             <span class="block text-primary-200">Scuba Diving Adventures</span>
           </h1>
           <p class="mt-6 max-w-lg mx-auto text-center text-xl text-primary-100 sm:max-w-3xl">
-            Discover the underwater world with our fleet of professional diving boats.
-            Book your next diving expedition today.
+            Discover the underwater world with our fleet of professional diving boats. Book your
+            next diving expedition today.
           </p>
           <div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
             <div class="space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
@@ -77,7 +79,8 @@
         Everything you need for the perfect dive
       </p>
       <p class="mt-5 max-w-prose mx-auto text-xl text-gray-500">
-        We provide top-notch diving experiences with professional equipment and experienced crew members.
+        We provide top-notch diving experiences with professional equipment and experienced crew
+        members.
       </p>
       <div class="mt-12">
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -86,7 +89,9 @@
               <div class="flow-root bg-gray-50 rounded-lg px-6 pb-8">
                 <div class="-mt-6">
                   <div>
-                    <span class="inline-flex items-center justify-center p-3 bg-primary-500 rounded-md shadow-lg">
+                    <span
+                      class="inline-flex items-center justify-center p-3 bg-primary-500 rounded-md shadow-lg"
+                    >
                       {@html feature.icon}
                     </span>
                   </div>

@@ -8,5 +8,5 @@ dotenv.config();
 export const ENCRYPTION_KEY = env.ENCRYPTION_KEY || process.env.ENCRYPTION_KEY;
 
 if (!ENCRYPTION_KEY) {
-    throw new Error('ENCRYPTION_KEY must be set in environment variables');
+  throw new Error('ENCRYPTION_KEY must be set in environment variables');
 }

@@ -59,10 +59,7 @@ export function encrypt(text: string, key: string): EncryptedData {
   }
 }
 
-export function decrypt(
-  encryptedData: EncryptedData,
-  key: string
-): string {
+export function decrypt(encryptedData: EncryptedData, key: string): string {
   try {
     logger.debug('Starting decryption process', {
       ivLength: encryptedData.iv.length / 2,
@@ -99,7 +96,7 @@ export function parseEncryptedData(encryptedString: string): EncryptedData {
     });
 
     const [encryptedValue, iv, authTag] = encryptedString.split('.');
-    
+
     if (!encryptedValue || !iv || !authTag) {
       throw new Error('Invalid encrypted data format');
     }

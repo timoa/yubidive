@@ -44,16 +44,9 @@ export function validatePassword(password: string): PasswordValidationResult {
   }
 
   // Common patterns check
-  const commonPatterns = [
-    '123456',
-    'password',
-    'qwerty',
-    'abc123',
-    'admin123',
-    'letmein'
-  ];
-  
-  if (commonPatterns.some(pattern => password.toLowerCase().includes(pattern))) {
+  const commonPatterns = ['123456', 'password', 'qwerty', 'abc123', 'admin123', 'letmein'];
+
+  if (commonPatterns.some((pattern) => password.toLowerCase().includes(pattern))) {
     errors.push('Password contains common patterns that are easily guessed');
     score = Math.max(0, score - 1);
   }
