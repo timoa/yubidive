@@ -39,7 +39,8 @@ async function main() {
       name: 'Sea Explorer',
       capacity: 12,
       description: 'Perfect for group dives, equipped with modern diving facilities.',
-      imageUrl: 'https://images.unsplash.com/photo-1559076948-cbd206bc0b13'
+      imageUrl:
+        'https://images.unsplash.com/photo-1682652481320-e1448d57824a?q=80&w=1024&auto=format&fit=crop'
     }
   });
 
@@ -51,7 +52,8 @@ async function main() {
       name: 'Reef Diver',
       capacity: 8,
       description: 'Ideal for intimate diving experiences and reef exploration.',
-      imageUrl: 'https://images.unsplash.com/photo-1564352969906-8b7f46ba4b8b'
+      imageUrl:
+        'https://images.unsplash.com/photo-1650806139441-7f48e053df1e?q=80&w=1024&auto=format&fit=crop'
     }
   });
 
@@ -61,9 +63,9 @@ async function main() {
     update: {},
     create: {
       id: 'a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c8d',
-      date: new Date('2024-03-20'),
-      startTime: new Date('2024-03-20T09:00:00Z'),
-      endTime: new Date('2024-03-20T12:00:00Z'),
+      date: new Date('2024-11-23'),
+      startTime: new Date('2024-11-23T08:00:00Z'),
+      endTime: new Date('2024-11-23T11:00:00Z'),
       boatId: seaExplorer.id
     }
   });
@@ -73,9 +75,9 @@ async function main() {
     update: {},
     create: {
       id: 'b2c3d4e5-f6a1-5b2c-9d3e-4f5a6b7c8d9e',
-      date: new Date('2024-03-21'),
-      startTime: new Date('2024-03-21T09:00:00Z'),
-      endTime: new Date('2024-03-21T12:00:00Z'),
+      date: new Date('2024-11-30'),
+      startTime: new Date('2024-11-30T08:00:00Z'),
+      endTime: new Date('22024-11-30T11:00:00Z'),
       boatId: reefDiver.id
     }
   });
