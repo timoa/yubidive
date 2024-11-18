@@ -50,3 +50,7 @@ Build the project:
 ```bash
 pnpm run build
 ```
+
+## License
+
+This project is under the Apache 2 license. See the [LICENSE](LICENSE) file for more details.
