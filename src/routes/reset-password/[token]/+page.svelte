@@ -49,29 +49,28 @@
     error = '';
 
     try {
-      const response = await fetch('/api/auth/reset-password', {
+      const response = await fetch(`/api/reset-password/${$page.params.token}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          token: $page.params.token,
-          password
-        })
+        body: JSON.stringify({ password })
       });
-
-      const data = await response.json();
 
       if (response.ok) {
         success = true;
+        setTimeout(() => {
+          goto('/login');
+        }, 3000);
       } else {
-        error = data.error;
+        const data = await response.json();
+        error = data.message || 'Failed to reset password. Please try again.';
       }
-    } catch (err) {
-      error = 'An error occurred. Please try again.';
+    } catch {
+      error = 'An unexpected error occurred. Please try again.';
+    } finally {
+      loading = false;
     }
-
-    loading = false;
   }
 </script>
 

@@ -5,7 +5,7 @@
     getPasswordStrengthText
   } from '$lib/validation';
 
-  export let password: string;
+  export let password = '';
   export let showDetails = false;
 
   $: validation = validatePassword(password);
@@ -20,7 +20,7 @@
         <div
           class="h-full transition-all duration-300 {strengthColor}"
           style="width: {(validation.score + 1) * 20}%"
-        />
+        ></div>
       {/if}
     </div>
     {#if password}

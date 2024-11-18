@@ -1,28 +1,20 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { goto, invalidateAll } from '$app/navigation';
+  import { invalidateAll } from '$app/navigation';
   import { validatePassword } from '$lib/validation';
   import PasswordStrengthIndicator from '$lib/components/PasswordStrengthIndicator.svelte';
-  import { onMount } from 'svelte';
 
-  $: user = $page.data.user;
+  const user = $page.data.user;
 
-  let name = '';
-  let email = '';
+  let name = user?.name ?? '';
+  let email = user?.email ?? '';
   let currentPassword = '';
   let newPassword = '';
   let confirmPassword = '';
+  let loading = false;
   let error = '';
   let success = '';
-  let loading = false;
 
-  // Initialize form with user data
-  $: if (user) {
-    name = user.name;
-    email = user.email;
-  }
-
-  // Form validation
   let touched = {
     name: false,
     email: false,
@@ -31,24 +23,28 @@
     confirmPassword: false
   };
 
-  $: emailError =
-    touched.email && !email
-      ? 'Email is required'
-      : touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-        ? 'Invalid email format'
-        : '';
-
   $: nameError = touched.name && !name ? 'Name is required' : '';
 
+  $: emailError = touched.email
+    ? !email
+      ? 'Email is required'
+      : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        ? 'Invalid email format'
+        : ''
+    : '';
+
   $: passwordValidation = validatePassword(newPassword);
+
   $: newPasswordError =
     touched.newPassword && newPassword && !passwordValidation.isValid
       ? passwordValidation.errors[0]
       : '';
 
   $: confirmPasswordError =
-    touched.confirmPassword && newPassword && confirmPassword !== newPassword
-      ? 'Passwords do not match'
+    touched.confirmPassword && newPassword
+      ? confirmPassword !== newPassword
+        ? 'Passwords do not match'
+        : ''
       : '';
 
   $: isValid =
@@ -58,7 +54,7 @@
     !nameError &&
     (!newPassword || (passwordValidation.isValid && confirmPassword === newPassword));
 
-  function handleBlur(field: keyof typeof touched) {
+  function handleBlur(field) {
     touched[field] = true;
   }
 
@@ -70,7 +66,7 @@
     success = '';
 
     try {
-      const response = await fetch('/api/auth/profile', {
+      const response = await fetch('/api/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -78,33 +74,26 @@
         body: JSON.stringify({
           name,
           email,
-          currentPassword: currentPassword || undefined,
-          newPassword: newPassword || undefined
+          currentPassword,
+          newPassword
         })
       });
 
-      const data = await response.json();
-
       if (response.ok) {
         success = 'Profile updated successfully';
-        // Reset password fields
         currentPassword = '';
         newPassword = '';
         confirmPassword = '';
-        // Reset touched state for password fields
-        touched.currentPassword = false;
-        touched.newPassword = false;
-        touched.confirmPassword = false;
-        // Refresh page data to update header
         await invalidateAll();
       } else {
-        error = data.error || 'An error occurred while updating your profile';
+        const data = await response.json();
+        error = data.error || 'Failed to update profile';
       }
-    } catch (err) {
-      error = 'An error occurred while updating your profile';
-    } finally {
-      loading = false;
+    } catch {
+      error = 'An unexpected error occurred';
     }
+
+    loading = false;
   }
 </script>
 

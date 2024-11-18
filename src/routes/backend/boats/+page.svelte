@@ -1,15 +1,15 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
-  import type { PageData } from './$types';
   import { format } from 'date-fns';
+  import type { PageData } from './$types';
 
   export let data: PageData;
   let boats = data.boats;
 
   // Form states
   let showCreateForm = false;
-  let editingBoat: any = null;
+  let editingBoat = null;
   let loading = false;
 
   // Form data
@@ -27,7 +27,7 @@
     showCreateForm = false;
   }
 
-  function editBoat(boat: any) {
+  function editBoat(boat) {
     editingBoat = boat;
     name = boat.name;
     description = boat.description || '';
@@ -36,10 +36,10 @@
     showCreateForm = true;
   }
 
-  function getBookedDatesString(boat: any) {
+  function getBookedDatesString(boat) {
     const dates = boat.schedules
-      .filter((s: any) => s.bookings.length > 0)
-      .map((s: any) => format(new Date(s.date), 'PPP'))
+      .filter((s) => s.bookings.length > 0)
+      .map((s) => format(new Date(s.date), 'PPP'))
       .join(', ');
     return dates || 'No bookings';
   }
@@ -279,8 +279,8 @@
                     <button
                       type="submit"
                       class="inline-flex items-center p-1.5 text-red-600 hover:text-red-900 hover:bg-red-100 rounded-full"
-                      disabled={loading || boat.schedules.some((s: any) => s.bookings.length > 0)}
-                      title={boat.schedules.some((s: any) => s.bookings.length > 0)
+                      disabled={loading || boat.schedules.some((s) => s.bookings.length > 0)}
+                      title={boat.schedules.some((s) => s.bookings.length > 0)
                         ? 'Cannot delete boat with existing bookings'
                         : 'Delete boat'}
                     >

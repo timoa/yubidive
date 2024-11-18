@@ -1,13 +1,13 @@
 <script lang="ts">
   export let isOpen = false;
-  export let title: string;
-  export let message: string;
-  export let onConfirm: () => void;
-  export let onCancel: () => void;
+  export let title = '';
+  export let message = '';
+  export let onConfirm = () => {};
+  export let onCancel = () => {};
 </script>
 
 {#if isOpen}
-  <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+  <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
   <div class="fixed inset-0 z-10 overflow-y-auto">
     <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
       <div

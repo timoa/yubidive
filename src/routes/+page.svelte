@@ -1,25 +1,23 @@
 <script>
+  import EquipmentIcon from '$lib/components/icons/EquipmentIcon.svelte';
+  import CrewIcon from '$lib/components/icons/CrewIcon.svelte';
+  import ScheduleIcon from '$lib/components/icons/ScheduleIcon.svelte';
+
   const features = [
     {
       name: 'Professional Equipment',
       description: 'All our boats are equipped with the latest safety and diving equipment.',
-      icon: `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-      </svg>`
+      icon: EquipmentIcon
     },
     {
       name: 'Experienced Crew',
       description: 'Our crew members are certified professionals with years of experience.',
-      icon: `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-      </svg>`
+      icon: CrewIcon
     },
     {
       name: 'Flexible Scheduling',
       description: 'Choose from various time slots that fit your schedule perfectly.',
-      icon: `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>`
+      icon: ScheduleIcon
     }
   ];
 </script>
@@ -37,7 +35,7 @@
           />
           <div
             class="absolute inset-0 bg-gradient-to-r from-primary-800 to-primary-700 mix-blend-multiply"
-          />
+          ></div>
         </div>
         <div class="relative px-4 py-32 sm:px-6 sm:py-40 lg:py-48 lg:px-8">
           <h1 class="text-center text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
@@ -92,7 +90,7 @@
                     <span
                       class="inline-flex items-center justify-center p-3 bg-primary-500 rounded-md shadow-lg"
                     >
-                      {@html feature.icon}
+                      <svelte:component this={feature.icon} />
                     </span>
                   </div>
                   <h3 class="mt-8 text-lg font-medium text-gray-900 tracking-tight">
