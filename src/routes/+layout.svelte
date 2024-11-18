@@ -12,8 +12,9 @@
   
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Boats', href: '/members/boats', requireAuth: true },
+    { name: 'Boats', href: '/members/boats', requireCustomer: true },
     { name: 'My Bookings', href: '/members/bookings', requireCustomer: true },
+    { name: 'Boats', href: '/backend/boats', requireAdmin: true },
     { name: 'Schedules', href: '/backend/schedules', requireAdmin: true },
     { name: 'Bookings', href: '/backend/bookings', requireAdmin: true }
   ];

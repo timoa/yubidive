@@ -1,11 +1,11 @@
 import { prisma } from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { requireRole } from '$lib/server/auth-utils';
+import { requireCustomer } from '$lib/server/auth-utils';
 
 export const load: PageServerLoad = async (event) => {
-    // Ensure only customers and admins can access this route
-    await requireRole(event, ['customer', 'admin']);
+    // Ensure only customers can access this route
+    await requireCustomer(event);
 
     try {
         const boats = await prisma.boat.findMany({
