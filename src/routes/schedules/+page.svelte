@@ -2,6 +2,7 @@
     import { enhance } from '$app/forms';
     import type { PageData } from './$types';
     import { format } from 'date-fns';
+    import { invalidateAll } from '$app/navigation';
 
     export let data: PageData;
 
@@ -10,17 +11,23 @@
 
     let selectedBoat = '';
     let selectedDate = '';
+    let selectedStartTime = '09:00';
+    let selectedEndTime = '12:00';
     let editingSchedule: any = null;
 
     function resetForm() {
         selectedBoat = '';
         selectedDate = '';
+        selectedStartTime = '09:00';
+        selectedEndTime = '12:00';
     }
 
     function startEdit(schedule: any) {
         editingSchedule = {
             ...schedule,
-            date: format(new Date(schedule.date), 'yyyy-MM-dd')
+            date: format(new Date(schedule.date), 'yyyy-MM-dd'),
+            startTime: format(new Date(schedule.startTime), 'HH:mm'),
+            endTime: format(new Date(schedule.endTime), 'HH:mm')
         };
     }
 
@@ -39,6 +46,7 @@
             return async ({ result }) => {
                 if (result.type === 'success') {
                     resetForm();
+                    await invalidateAll();
                 }
             };
         }} class="space-y-4">
@@ -70,6 +78,31 @@
                 />
             </div>
 
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="startTime" class="block text-sm font-medium text-gray-700">Start Time</label>
+                    <input
+                        type="time"
+                        id="startTime"
+                        name="startTime"
+                        bind:value={selectedStartTime}
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        required
+                    />
+                </div>
+                <div>
+                    <label for="endTime" class="block text-sm font-medium text-gray-700">End Time</label>
+                    <input
+                        type="time"
+                        id="endTime"
+                        name="endTime"
+                        bind:value={selectedEndTime}
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        required
+                    />
+                </div>
+            </div>
+
             <button
                 type="submit"
                 class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -86,6 +119,7 @@
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Boat</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bookings</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
@@ -122,6 +156,26 @@
                             {/if}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
+                            {#if editingSchedule?.id === schedule.id}
+                                <div class="flex space-x-2">
+                                    <input
+                                        type="time"
+                                        bind:value={editingSchedule.startTime}
+                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    />
+                                    <input
+                                        type="time"
+                                        bind:value={editingSchedule.endTime}
+                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    />
+                                </div>
+                            {:else}
+                                <div class="text-sm text-gray-900">
+                                    {format(new Date(schedule.startTime), 'HH:mm')} - {format(new Date(schedule.endTime), 'HH:mm')}
+                                </div>
+                            {/if}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">
                                 {schedule.bookings.length} bookings
                             </div>
@@ -135,6 +189,7 @@
                                         return async ({ result }) => {
                                             if (result.type === 'success') {
                                                 editingSchedule = null;
+                                                await invalidateAll();
                                             }
                                         };
                                     }}
@@ -143,6 +198,8 @@
                                     <input type="hidden" name="id" value={editingSchedule.id} />
                                     <input type="hidden" name="boatId" value={editingSchedule.boatId} />
                                     <input type="hidden" name="date" value={editingSchedule.date} />
+                                    <input type="hidden" name="startTime" value={editingSchedule.startTime} />
+                                    <input type="hidden" name="endTime" value={editingSchedule.endTime} />
                                     <button
                                         type="submit"
                                         class="text-green-600 hover:text-green-900"
@@ -162,21 +219,25 @@
                                     type="button"
                                     class="text-blue-600 hover:text-blue-900"
                                     on:click={() => startEdit(schedule)}
-                                    disabled={schedule.bookings.length > 0}
                                 >
                                     Edit
                                 </button>
                                 <form
                                     method="POST"
                                     action="?/delete"
-                                    use:enhance
+                                    use:enhance={() => {
+                                        return async ({ result }) => {
+                                            if (result.type === 'success') {
+                                                await invalidateAll();
+                                            }
+                                        };
+                                    }}
                                     class="inline-block"
                                 >
                                     <input type="hidden" name="id" value={schedule.id} />
                                     <button
                                         type="submit"
                                         class="text-red-600 hover:text-red-900"
-                                        disabled={schedule.bookings.length > 0}
                                     >
                                         Delete
                                     </button>

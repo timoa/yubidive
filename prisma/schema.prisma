@@ -27,6 +27,8 @@ model Boat {
 model BoatSchedule {
   id        String    @id @default(uuid())
   date      DateTime
+  startTime DateTime  @default(now())
+  endTime   DateTime  @default(now())
   boat      Boat      @relation(fields: [boatId], references: [id])
   boatId    String
   bookings  Booking[]
