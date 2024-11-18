@@ -66,7 +66,10 @@
                 </p>
               </div>
               <div class="mt-4">
-                <a href="/auth/signin" class="text-sm font-medium text-green-600 hover:text-green-500">
+                <a
+                  href="/auth/signin"
+                  class="text-sm font-medium text-green-600 hover:text-green-500"
+                >
                   Return to sign in
                   <span aria-hidden="true"> &rarr;</span>
                 </a>

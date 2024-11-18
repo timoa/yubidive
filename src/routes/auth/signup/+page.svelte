@@ -83,7 +83,9 @@
     <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
     <p class="mt-2 text-center text-sm text-gray-600">
       Already have an account?
-      <a href="/auth/signin" class="font-medium text-primary-600 hover:text-primary-500"> Sign in here </a>
+      <a href="/auth/signin" class="font-medium text-primary-600 hover:text-primary-500">
+        Sign in here
+      </a>
     </p>
   </div>
 

@@ -84,7 +84,8 @@
         Everything you need for the perfect dive
       </p>
       <p class="mt-5 max-w-prose mx-auto text-xl text-gray-500">
-        We provide top-notch diving experiences with professional equipment and experienced crew members.
+        We provide top-notch diving experiences with professional equipment and experienced crew
+        members.
       </p>
       <div class="mt-12">
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">

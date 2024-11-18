@@ -19,7 +19,13 @@
 
   $: navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Boats', href: '/members/boats', requireAuth: true, requireCustomer: true, hideWhenAdmin: true },
+    {
+      name: 'Boats',
+      href: '/members/boats',
+      requireAuth: true,
+      requireCustomer: true,
+      hideWhenAdmin: true
+    },
     { name: 'My Bookings', href: '/members/bookings', requireAuth: true, requireCustomer: true },
     { name: 'Boats', href: '/backend/boats', requireAuth: true, requireAdmin: true },
     { name: 'Manage Schedules', href: '/backend/schedules', requireAuth: true, requireAdmin: true },
@@ -90,7 +96,9 @@
                   on:click={() => (isProfileMenuOpen = !isProfileMenuOpen)}
                 >
                   <span class="sr-only">Open user menu</span>
-                  <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-primary-100">
+                  <span
+                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-primary-100"
+                  >
                     <span class="text-sm font-medium leading-none text-primary-700">
                       {user.name[0].toUpperCase()}
                     </span>
