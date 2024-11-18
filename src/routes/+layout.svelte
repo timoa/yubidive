@@ -12,6 +12,7 @@
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Boats', href: '/boats', requireAuth: true },
+    { name: 'Schedules', href: '/schedules', requireAdmin: true },
     { name: 'Bookings', href: '/bookings', requireAdmin: true }
   ];
 
