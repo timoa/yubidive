@@ -40,44 +40,32 @@ export async function GET({ url }: RequestEvent) {
 export async function POST({ request }: RequestEvent) {
     try {
         const body = await request.json();
-        const { boatId, userId, startTime, endTime } = body;
+        const { scheduleId, userId } = body;
 
         // Check for booking conflicts
         const existingBooking = await prisma.booking.findFirst({
             where: {
-                boatId,
-                status: 'confirmed',
-                OR: [
-                    {
-                        AND: [
-                            { startTime: { lte: new Date(startTime) } },
-                            { endTime: { gt: new Date(startTime) } }
-                        ]
-                    },
-                    {
-                        AND: [
-                            { startTime: { lt: new Date(endTime) } },
-                            { endTime: { gte: new Date(endTime) } }
-                        ]
-                    }
-                ]
+                scheduleId,
+                status: 'confirmed'
             }
         });
 
         if (existingBooking) {
-            return json({ error: 'Time slot is already booked' }, { status: 400 });
+            return json({ error: 'This schedule is already booked' }, { status: 400 });
         }
 
         const booking = await prisma.booking.create({
             data: {
-                boatId,
+                scheduleId,
                 userId,
-                startTime: new Date(startTime),
-                endTime: new Date(endTime),
                 status: 'pending'
             },
             include: {
-                boat: true,
+                boatSchedule: {
+                    include: {
+                        boat: true
+                    }
+                },
                 user: {
                     select: {
                         id: true,
@@ -88,7 +76,7 @@ export async function POST({ request }: RequestEvent) {
             }
         });
 
-        return json(booking, { status: 201 });
+        return json(booking);
     } catch (error) {
         return json({ error: 'Failed to create booking' }, { status: 500 });
     }

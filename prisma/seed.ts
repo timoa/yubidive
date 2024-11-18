@@ -50,32 +50,45 @@ async function main() {
       id: 'f67d2c1b-3a8e-4d9f-9e5b-6c2a1b3d4e5f',
       name: 'Reef Diver',
       capacity: 8,
-      description: 'Ideal for smaller groups and specialized diving experiences.',
-      imageUrl: 'https://images.unsplash.com/photo-1622567817558-3eac5d13fa86'
+      description: 'Ideal for intimate diving experiences and reef exploration.',
+      imageUrl: 'https://images.unsplash.com/photo-1564352969906-8b7f46ba4b8b'
+    }
+  });
+
+  // Create boat schedules
+  const schedule1 = await prisma.boatSchedule.upsert({
+    where: { id: 'a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c8d' },
+    update: {},
+    create: {
+      id: 'a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c8d',
+      date: new Date('2024-03-20'),
+      boatId: seaExplorer.id
+    }
+  });
+
+  const schedule2 = await prisma.boatSchedule.upsert({
+    where: { id: 'b2c3d4e5-f6a1-5b2c-9d3e-4f5a6b7c8d9e' },
+    update: {},
+    create: {
+      id: 'b2c3d4e5-f6a1-5b2c-9d3e-4f5a6b7c8d9e',
+      date: new Date('2024-03-21'),
+      boatId: reefDiver.id
     }
   });
 
   // Create a booking
   const booking1 = await prisma.booking.upsert({
-    where: { id: 'a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c8d' },
+    where: { id: 'c3d4e5f6-a1b2-6c3d-0e4f-5a6b7c8d9e0f' },
     update: {},
     create: {
-      id: 'a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c8d',
-      startTime: new Date('2024-03-20T09:00:00Z'),
-      endTime: new Date('2024-03-20T15:00:00Z'),
+      id: 'c3d4e5f6-a1b2-6c3d-0e4f-5a6b7c8d9e0f',
       status: 'confirmed',
-      boatId: seaExplorer.id,
+      scheduleId: schedule1.id,
       userId: customer.id
     }
   });
 
-  console.log({
-    admin,
-    customer,
-    seaExplorer,
-    reefDiver,
-    booking1
-  });
+  console.log({ admin, customer, seaExplorer, reefDiver, schedule1, schedule2, booking1 });
 }
 
 main()
