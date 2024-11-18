@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import { signOut } from '$lib/auth';
   import { goto, invalidateAll } from '$app/navigation';
+  import { afterNavigate } from '$app/navigation';
 
   let isMenuOpen = false;
   let isProfileMenuOpen = false;
@@ -11,21 +12,44 @@
   $: isAdmin = user?.role === 'admin';
   $: isCustomer = user?.role === 'customer';
 
-  const navigation = [
+  afterNavigate(() => {
+    isProfileMenuOpen = false;
+    isMenuOpen = false;
+  });
+
+  $: navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Boats', href: '/members/boats', requireCustomer: true },
-    { name: 'My Bookings', href: '/members/bookings', requireCustomer: true },
-    { name: 'Boats', href: '/backend/boats', requireAdmin: true },
-    { name: 'Schedules', href: '/backend/schedules', requireAdmin: true },
-    { name: 'Bookings', href: '/backend/bookings', requireAdmin: true }
+    { name: 'Boats', href: '/members/boats', requireAuth: true, requireCustomer: true, hideWhenAdmin: true },
+    { name: 'My Bookings', href: '/members/bookings', requireAuth: true, requireCustomer: true },
+    { name: 'Boats', href: '/backend/boats', requireAuth: true, requireAdmin: true },
+    { name: 'Manage Schedules', href: '/backend/schedules', requireAuth: true, requireAdmin: true },
+    { name: 'Manage Bookings', href: '/backend/bookings', requireAuth: true, requireAdmin: true }
   ];
 
   async function handleSignOut() {
     await signOut();
-    await invalidateAll(); // Invalidate all page data
-    await goto('/');
+    await invalidateAll();
+    isProfileMenuOpen = false;
+    goto('/');
   }
+
+  // Close dropdown when clicking outside
+  function handleClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const menuButton = document.getElementById('user-menu-button');
+    const menu = document.getElementById('user-menu-dropdown');
+
+    if (menuButton && menu && !menuButton.contains(target) && !menu.contains(target)) {
+      isProfileMenuOpen = false;
+    }
+  }
+
+  $: console.log('User Role:', user?.role);
+  $: console.log('Is Admin:', isAdmin);
+  $: console.log('Is Customer:', isCustomer);
 </script>
+
+<svelte:window on:click={handleClickOutside} />
 
 <div class="min-h-screen bg-gray-50">
   <nav class="bg-white shadow-sm border-b border-gray-200">
@@ -37,16 +61,14 @@
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             {#each navigation as item}
-              {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireCustomer || isCustomer)}
+              {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireCustomer || isCustomer) && (!item.hideWhenAdmin || !isAdmin)}
                 <a
                   href={item.href}
-                  class="
-                    {$page.url.pathname === item.href
-                    ? 'border-primary-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'}
-                    inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium
-                    transition-colors duration-200
-                  "
+                  class={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                    $page.url.pathname === item.href
+                      ? 'border-primary-500 text-gray-900'
+                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  }`}
                 >
                   {item.name}
                 </a>
@@ -77,7 +99,8 @@
 
                 {#if isProfileMenuOpen}
                   <div
-                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    id="user-menu-dropdown"
+                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="user-menu-button"
@@ -110,13 +133,13 @@
           {:else}
             <div class="flex space-x-4">
               <a
-                href="/signin"
-                class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-primary-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                href="/auth/signin"
+                class="text-gray-500 hover:text-gray-700 inline-flex items-center px-3 py-1.5 text-sm font-medium"
               >
                 Sign In
               </a>
               <a
-                href="/signup"
+                href="/auth/signup"
                 class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
                 Sign Up
@@ -161,16 +184,14 @@
       <div class="sm:hidden" id="mobile-menu">
         <div class="pt-2 pb-3 space-y-1">
           {#each navigation as item}
-            {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireCustomer || isCustomer)}
+            {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireCustomer || isCustomer) && (!item.hideWhenAdmin || !isAdmin)}
               <a
                 href={item.href}
-                class="
-                  {$page.url.pathname === item.href
-                  ? 'bg-primary-50 border-primary-500 text-primary-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'}
-                  block pl-3 pr-4 py-2 border-l-4 text-base font-medium
-                  transition-colors duration-200
-                "
+                class={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                  $page.url.pathname === item.href
+                    ? 'bg-primary-50 border-primary-500 text-primary-700'
+                    : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               >
                 {item.name}
               </a>
@@ -216,13 +237,13 @@
           <div class="pt-4 pb-3 border-t border-gray-200">
             <div class="space-y-1">
               <a
-                href="/signin"
+                href="/auth/signin"
                 class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
               >
                 Sign In
               </a>
               <a
-                href="/signup"
+                href="/auth/signup"
                 class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
               >
                 Sign Up

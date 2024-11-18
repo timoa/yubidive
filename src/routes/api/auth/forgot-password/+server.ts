@@ -43,8 +43,8 @@ export async function POST({ request }: RequestEvent) {
       }
     });
 
-    // In a real application, you would send an email here
-    console.log(`Password reset link: http://localhost:5173/reset-password/${resetToken}`);
+    // TODO: Send email with reset link
+    console.log(`Password reset link: http://localhost:5173/auth/reset-password/${resetToken}`);
 
     // Always return success to prevent email enumeration
     return json({ success: true });

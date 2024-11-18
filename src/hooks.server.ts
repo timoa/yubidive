@@ -42,7 +42,7 @@ const authorizationCheck: Handle = async ({ event, resolve }) => {
 
   if (protection) {
     if (!event.locals.user) {
-      throw redirect(303, '/signin');
+      throw redirect(303, '/auth/signin');
     }
 
     if (protection.role === 'admin' && event.locals.user.role !== 'admin') {

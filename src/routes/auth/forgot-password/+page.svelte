@@ -35,6 +35,12 @@
     <p class="mt-2 text-center text-sm text-gray-600">
       Enter your email address and we'll send you a link to reset your password.
     </p>
+    <p class="mt-2 text-center text-sm text-gray-600">
+      Remember your password?
+      <a href="/auth/signin" class="font-medium text-primary-600 hover:text-primary-500">
+        Sign in here
+      </a>
+    </p>
   </div>
 
   <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -60,7 +66,7 @@
                 </p>
               </div>
               <div class="mt-4">
-                <a href="/signin" class="text-sm font-medium text-green-600 hover:text-green-500">
+                <a href="/auth/signin" class="text-sm font-medium text-green-600 hover:text-green-500">
                   Return to sign in
                   <span aria-hidden="true"> &rarr;</span>
                 </a>
@@ -116,7 +122,7 @@
           </div>
 
           <div class="text-sm text-center">
-            <a href="/signin" class="font-medium text-primary-600 hover:text-primary-500">
+            <a href="/auth/signin" class="font-medium text-primary-600 hover:text-primary-500">
               Return to sign in
             </a>
           </div>

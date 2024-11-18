@@ -1,7 +1,10 @@
-<script>
+<script lang="ts">
+  import { page } from '$app/stores';
   import EquipmentIcon from '$lib/components/icons/EquipmentIcon.svelte';
   import CrewIcon from '$lib/components/icons/CrewIcon.svelte';
   import ScheduleIcon from '$lib/components/icons/ScheduleIcon.svelte';
+
+  const user = $page.data.user;
 
   const features = [
     {
@@ -20,6 +23,10 @@
       icon: ScheduleIcon
     }
   ];
+
+  function getHref(path: string): string {
+    return user ? path : '/auth/signin';
+  }
 </script>
 
 <div class="relative my-8 sm:my-16 lg:my-24">
@@ -49,13 +56,13 @@
           <div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
             <div class="space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
               <a
-                href="/boats"
+                href={getHref('/members/boats')}
                 class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-primary-700 bg-white hover:bg-primary-50 sm:px-8"
               >
                 View Boats
               </a>
               <a
-                href="/bookings"
+                href={getHref('/members/bookings')}
                 class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-500 bg-opacity-60 hover:bg-opacity-70 sm:px-8"
               >
                 Book Now
@@ -77,8 +84,7 @@
         Everything you need for the perfect dive
       </p>
       <p class="mt-5 max-w-prose mx-auto text-xl text-gray-500">
-        We provide top-notch diving experiences with professional equipment and experienced crew
-        members.
+        We provide top-notch diving experiences with professional equipment and experienced crew members.
       </p>
       <div class="mt-12">
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">

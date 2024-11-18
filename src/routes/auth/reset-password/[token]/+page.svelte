@@ -49,7 +49,7 @@
     error = '';
 
     try {
-      const response = await fetch(`/api/reset-password/${$page.params.token}`, {
+      const response = await fetch(`/api/auth/reset-password/${$page.params.token}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -60,7 +60,7 @@
       if (response.ok) {
         success = true;
         setTimeout(() => {
-          goto('/login');
+          goto('/auth/signin');
         }, 3000);
       } else {
         const data = await response.json();
