@@ -37,7 +37,7 @@ export function hasRole(requiredRole: 'customer' | 'admin'): boolean {
   return hasRequiredRole;
 }
 
-export async function signIn(email: string, password: string): Promise<{ success: boolean; error?: AuthError }> {
+export async function signIn(email: string, password: string): Promise<{ success: boolean; error?: AuthError; user?: AuthUser }> {
   try {
     const response = await fetch('/api/auth/signin', {
       method: 'POST',
@@ -49,23 +49,24 @@ export async function signIn(email: string, password: string): Promise<{ success
 
     const data = await response.json();
 
-    if (response.ok) {
-      user.set(data.user);
-      return { success: true };
-    } else {
-      return {
-        success: false,
-        error: new AuthError(
-          data.error || 'An error occurred during sign in',
-          data.code || 'UNKNOWN_ERROR'
-        )
-      };
+    if (!response.ok) {
+      throw new AuthError(data.error || 'Failed to sign in', data.code || 'UNKNOWN_ERROR');
     }
-  } catch (error) {
-    return {
-      success: false,
-      error: new AuthError('Network error occurred', 'NETWORK_ERROR')
+
+    const userData: AuthUser = {
+      id: data.user.id,
+      email: data.user.email,
+      name: data.user.name,
+      role: data.user.role,
     };
+
+    user.set(userData);
+    return { success: true, user: userData };
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return { success: false, error: err };
+    }
+    return { success: false, error: new AuthError('An unexpected error occurred', 'UNKNOWN_ERROR') };
   }
 }
 
@@ -85,30 +86,20 @@ export async function signUp(
 
     const data = await response.json();
 
-    if (response.ok) {
-      user.set(data.user);
-      return { success: true };
-    } else {
-      return {
-        success: false,
-        error: new AuthError(
-          data.error || 'An error occurred during sign up',
-          data.code || 'UNKNOWN_ERROR'
-        )
-      };
+    if (!response.ok) {
+      throw new AuthError(data.error || 'Failed to sign up', data.code || 'UNKNOWN_ERROR');
     }
-  } catch (error) {
-    return {
-      success: false,
-      error: new AuthError('Network error occurred', 'NETWORK_ERROR')
-    };
+
+    return { success: true };
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return { success: false, error: err };
+    }
+    return { success: false, error: new AuthError('An unexpected error occurred', 'UNKNOWN_ERROR') };
   }
 }
 
 export async function signOut(): Promise<void> {
-  try {
-    await fetch('/api/auth/signout', { method: 'POST' });
-  } finally {
-    user.set(null);
-  }
+  await fetch('/api/auth/signout', { method: 'POST' });
+  user.set(null);
 }
