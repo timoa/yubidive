@@ -2,8 +2,12 @@ import { prisma } from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import type { Actions } from './$types';
+import { requireAdmin } from '$lib/server/auth-utils';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
+    // Ensure only admins can access this route
+    await requireAdmin(event);
+
     try {
         const [schedules, boats] = await Promise.all([
             prisma.boatSchedule.findMany({
@@ -32,8 +36,11 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-    create: async ({ request }) => {
-        const formData = await request.formData();
+    create: async (event) => {
+        // Ensure only admins can create schedules
+        await requireAdmin(event);
+
+        const formData = await event.request.formData();
         const boatId = formData.get('boatId') as string;
         const date = formData.get('date') as string;
         const startTime = formData.get('startTime') as string;
@@ -72,8 +79,11 @@ export const actions: Actions = {
         }
     },
 
-    edit: async ({ request }) => {
-        const formData = await request.formData();
+    edit: async (event) => {
+        // Ensure only admins can edit schedules
+        await requireAdmin(event);
+
+        const formData = await event.request.formData();
         const id = formData.get('id') as string;
         const boatId = formData.get('boatId') as string;
         const date = formData.get('date') as string;
@@ -115,8 +125,11 @@ export const actions: Actions = {
         }
     },
 
-    delete: async ({ request }) => {
-        const formData = await request.formData();
+    delete: async (event) => {
+        // Ensure only admins can delete schedules
+        await requireAdmin(event);
+
+        const formData = await event.request.formData();
         const id = formData.get('id') as string;
 
         if (!id) {

@@ -3,9 +3,9 @@ import { sequence } from '@sveltejs/kit/hooks';
 import { prisma } from '$lib/prisma';
 
 const protectedPaths = [
-  { path: '/boats', role: 'customer' },
-  { path: '/boats/[id]', role: 'customer' },
-  { path: '/bookings', role: 'admin' }
+  { path: '/members/boats', role: 'customer' },
+  { path: '/backend/schedules', role: 'admin' },
+  { path: '/backend/bookings', role: 'admin' }
 ];
 
 const authenticationCheck: Handle = async ({ event, resolve }) => {
@@ -34,12 +34,10 @@ const authorizationCheck: Handle = async ({ event, resolve }) => {
 
   // Check if the current path needs protection
   const protection = protectedPaths.find(p => {
-    if (p.path.includes('[id]')) {
-      const pathParts = p.path.split('/');
-      const currentParts = pathname.split('/');
-      return pathParts[1] === currentParts[1];
-    }
-    return p.path === pathname;
+    const pathParts = p.path.split('/');
+    const currentParts = pathname.split('/');
+    // Match the first two parts of the path (e.g., /members/boats)
+    return pathParts[1] === currentParts[1] && pathParts[2] === currentParts[2];
   });
 
   if (protection) {
@@ -48,6 +46,10 @@ const authorizationCheck: Handle = async ({ event, resolve }) => {
     }
 
     if (protection.role === 'admin' && event.locals.user.role !== 'admin') {
+      throw redirect(303, '/');
+    }
+
+    if (protection.role === 'customer' && !['customer', 'admin'].includes(event.locals.user.role)) {
       throw redirect(303, '/');
     }
   }

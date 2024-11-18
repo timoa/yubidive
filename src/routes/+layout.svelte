@@ -8,12 +8,14 @@
   
   $: user = $page.data.user;
   $: isAdmin = user?.role === 'admin';
+  $: isCustomer = user?.role === 'customer';
   
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Boats', href: '/boats', requireAuth: true },
-    { name: 'Schedules', href: '/schedules', requireAdmin: true },
-    { name: 'Bookings', href: '/bookings', requireAdmin: true }
+    { name: 'Boats', href: '/members/boats', requireAuth: true },
+    { name: 'My Bookings', href: '/members/bookings', requireCustomer: true },
+    { name: 'Schedules', href: '/backend/schedules', requireAdmin: true },
+    { name: 'Bookings', href: '/backend/bookings', requireAdmin: true }
   ];
 
   async function handleSignOut() {
@@ -33,7 +35,7 @@
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             {#each navigation as item}
-              {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin)}
+              {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireCustomer || isCustomer)}
                 <a
                   href={item.href}
                   class="
@@ -131,7 +133,7 @@
       <div class="sm:hidden" id="mobile-menu">
         <div class="pt-2 pb-3 space-y-1">
           {#each navigation as item}
-            {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin)}
+            {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireCustomer || isCustomer)}
               <a
                 href={item.href}
                 class="
