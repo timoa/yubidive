@@ -8,7 +8,8 @@ The goal is to make an app that will help Suba clubs to manage their Scuba booki
 
 Also, make it runs on a free tier environment like Cloudflare Pages, Vercel or Netlify.
 
-The app is currently based on SvelteKit and TailwindCSS.
+The app is currently based on SvelteKit and TailwindCSS. It uses Prisma for database management.
+During the early development, the app will use a SQLite database and I will try to make it works with Cloudflare R2 database later.
 
 > Note: This project is still in (very) early development.
 
@@ -16,6 +17,18 @@ The app is currently based on SvelteKit and TailwindCSS.
 
 ```bash
 pnpm install
+```
+
+Create the SQLite database:
+
+```bash
+pnpm prisma db push
+```
+
+Seed the database:
+
+```bash
+pnpm prisma db seed
 ```
 
 ## Usage

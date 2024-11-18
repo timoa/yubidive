@@ -10,10 +10,22 @@
 
     let selectedBoat = '';
     let selectedDate = '';
+    let editingSchedule: any = null;
 
     function resetForm() {
         selectedBoat = '';
         selectedDate = '';
+    }
+
+    function startEdit(schedule: any) {
+        editingSchedule = {
+            ...schedule,
+            date: format(new Date(schedule.date), 'yyyy-MM-dd')
+        };
+    }
+
+    function cancelEdit() {
+        editingSchedule = null;
     }
 </script>
 
@@ -82,34 +94,94 @@
                 {#each schedules as schedule}
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{schedule.boat.name}</div>
+                            {#if editingSchedule?.id === schedule.id}
+                                <select
+                                    name="boatId"
+                                    bind:value={editingSchedule.boatId}
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                >
+                                    {#each boats as boat}
+                                        <option value={boat.id}>{boat.name}</option>
+                                    {/each}
+                                </select>
+                            {:else}
+                                <div class="text-sm font-medium text-gray-900">{schedule.boat.name}</div>
+                            {/if}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">
-                                {format(new Date(schedule.date), 'PPP')}
-                            </div>
+                            {#if editingSchedule?.id === schedule.id}
+                                <input
+                                    type="date"
+                                    bind:value={editingSchedule.date}
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                />
+                            {:else}
+                                <div class="text-sm text-gray-900">
+                                    {format(new Date(schedule.date), 'PPP')}
+                                </div>
+                            {/if}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">
                                 {schedule.bookings.length} bookings
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <form
-                                method="POST"
-                                action="?/delete"
-                                use:enhance
-                                class="inline-block"
-                            >
-                                <input type="hidden" name="id" value={schedule.id} />
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                            {#if editingSchedule?.id === schedule.id}
+                                <form
+                                    method="POST"
+                                    action="?/edit"
+                                    use:enhance={() => {
+                                        return async ({ result }) => {
+                                            if (result.type === 'success') {
+                                                editingSchedule = null;
+                                            }
+                                        };
+                                    }}
+                                    class="inline-block"
+                                >
+                                    <input type="hidden" name="id" value={editingSchedule.id} />
+                                    <input type="hidden" name="boatId" value={editingSchedule.boatId} />
+                                    <input type="hidden" name="date" value={editingSchedule.date} />
+                                    <button
+                                        type="submit"
+                                        class="text-green-600 hover:text-green-900"
+                                    >
+                                        Save
+                                    </button>
+                                </form>
                                 <button
-                                    type="submit"
-                                    class="text-red-600 hover:text-red-900"
+                                    type="button"
+                                    class="text-gray-600 hover:text-gray-900"
+                                    on:click={cancelEdit}
+                                >
+                                    Cancel
+                                </button>
+                            {:else}
+                                <button
+                                    type="button"
+                                    class="text-blue-600 hover:text-blue-900"
+                                    on:click={() => startEdit(schedule)}
                                     disabled={schedule.bookings.length > 0}
                                 >
-                                    Delete
+                                    Edit
                                 </button>
-                            </form>
+                                <form
+                                    method="POST"
+                                    action="?/delete"
+                                    use:enhance
+                                    class="inline-block"
+                                >
+                                    <input type="hidden" name="id" value={schedule.id} />
+                                    <button
+                                        type="submit"
+                                        class="text-red-600 hover:text-red-900"
+                                        disabled={schedule.bookings.length > 0}
+                                    >
+                                        Delete
+                                    </button>
+                                </form>
+                            {/if}
                         </td>
                     </tr>
                 {/each}

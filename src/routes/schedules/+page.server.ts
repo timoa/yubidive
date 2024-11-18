@@ -58,6 +58,35 @@ export const actions: Actions = {
         }
     },
 
+    edit: async ({ request }) => {
+        const formData = await request.formData();
+        const id = formData.get('id') as string;
+        const boatId = formData.get('boatId') as string;
+        const date = formData.get('date') as string;
+
+        if (!id || !boatId || !date) {
+            throw error(400, 'Missing required fields');
+        }
+
+        try {
+            const schedule = await prisma.boatSchedule.update({
+                where: { id },
+                data: {
+                    boatId,
+                    date: new Date(date)
+                },
+                include: {
+                    boat: true,
+                    bookings: true
+                }
+            });
+
+            return { success: true, schedule };
+        } catch (err) {
+            throw error(500, 'Failed to update schedule');
+        }
+    },
+
     delete: async ({ request }) => {
         const formData = await request.formData();
         const id = formData.get('id') as string;
