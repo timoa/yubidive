@@ -5,6 +5,7 @@
   import { goto, invalidateAll } from '$app/navigation';
 
   let isMenuOpen = false;
+  let isProfileMenuOpen = false;
 
   $: user = $page.data.user;
   $: isAdmin = user?.role === 'admin';
@@ -56,16 +57,55 @@
         <div class="hidden sm:ml-6 sm:flex sm:items-center">
           {#if user}
             <div class="ml-3 relative flex items-center space-x-4">
-              <a href="/profile" class="text-sm text-gray-700 hover:text-gray-900">
-                Welcome, {user.name}
-              </a>
-              <button
-                type="button"
-                on:click={handleSignOut}
-                class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-              >
-                Sign Out
-              </button>
+              <!-- Profile dropdown -->
+              <div class="ml-3 relative">
+                <button
+                  type="button"
+                  class="flex items-center max-w-xs text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                  id="user-menu-button"
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  on:click={() => (isProfileMenuOpen = !isProfileMenuOpen)}
+                >
+                  <span class="sr-only">Open user menu</span>
+                  <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-primary-100">
+                    <span class="text-sm font-medium leading-none text-primary-700">
+                      {user.name[0].toUpperCase()}
+                    </span>
+                  </span>
+                </button>
+
+                {#if isProfileMenuOpen}
+                  <div
+                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="user-menu-button"
+                    tabindex="-1"
+                  >
+                    <div class="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                      Welcome, {user.name}
+                    </div>
+                    <a
+                      href="/profile"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                      tabindex="-1"
+                    >
+                      Your Profile
+                    </a>
+                    <button
+                      type="button"
+                      class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                      tabindex="-1"
+                      on:click={handleSignOut}
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                {/if}
+              </div>
             </div>
           {:else}
             <div class="flex space-x-4">
@@ -165,8 +205,8 @@
               </a>
               <button
                 type="button"
-                on:click={handleSignOut}
                 class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                on:click={handleSignOut}
               >
                 Sign Out
               </button>
@@ -202,7 +242,7 @@
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div class="mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between">
         <div class="flex space-x-6 md:order-2">
-          <a href="#" class="text-gray-400 hover:text-gray-500">
+          <a href="https://facebook.com/yubidive" class="text-gray-400 hover:text-gray-500">
             <span class="sr-only">Facebook</span>
             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
               <path
@@ -212,7 +252,7 @@
               />
             </svg>
           </a>
-          <a href="#" class="text-gray-400 hover:text-gray-500">
+          <a href="https://instagram.com/yubidive" class="text-gray-400 hover:text-gray-500">
             <span class="sr-only">Instagram</span>
             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
               <path
@@ -222,7 +262,7 @@
               />
             </svg>
           </a>
-          <a href="#" class="text-gray-400 hover:text-gray-500">
+          <a href="https://twitter.com/yubidive" class="text-gray-400 hover:text-gray-500">
             <span class="sr-only">Twitter</span>
             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
               <path
