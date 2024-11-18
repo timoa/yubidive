@@ -3,6 +3,7 @@
     import type { PageData } from './$types';
     import { format } from 'date-fns';
     import { invalidateAll } from '$app/navigation';
+    import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 
     export let data: PageData;
 
@@ -14,6 +15,7 @@
     let selectedStartTime = '09:00';
     let selectedEndTime = '12:00';
     let editingSchedule: any = null;
+    let deleteSchedule: any = null;
 
     function resetForm() {
         selectedBoat = '';
@@ -33,6 +35,25 @@
 
     function cancelEdit() {
         editingSchedule = null;
+    }
+
+    function handleDeleteConfirm() {
+        const formData = new FormData();
+        formData.append('id', deleteSchedule.id);
+        
+        fetch('?/delete', {
+            method: 'POST',
+            body: formData
+        }).then(async (response) => {
+            if (response.ok) {
+                await invalidateAll();
+                deleteSchedule = null;
+            }
+        });
+    }
+
+    function handleDeleteCancel() {
+        deleteSchedule = null;
     }
 </script>
 
@@ -222,26 +243,13 @@
                                 >
                                     Edit
                                 </button>
-                                <form
-                                    method="POST"
-                                    action="?/delete"
-                                    use:enhance={() => {
-                                        return async ({ result }) => {
-                                            if (result.type === 'success') {
-                                                await invalidateAll();
-                                            }
-                                        };
-                                    }}
-                                    class="inline-block"
+                                <button
+                                    type="button"
+                                    class="text-red-600 hover:text-red-900"
+                                    on:click={() => deleteSchedule = schedule}
                                 >
-                                    <input type="hidden" name="id" value={schedule.id} />
-                                    <button
-                                        type="submit"
-                                        class="text-red-600 hover:text-red-900"
-                                    >
-                                        Delete
-                                    </button>
-                                </form>
+                                    Delete
+                                </button>
                             {/if}
                         </td>
                     </tr>
@@ -250,3 +258,11 @@
         </table>
     </div>
 </div>
+
+<ConfirmModal
+    isOpen={!!deleteSchedule}
+    title="Delete Schedule"
+    message={deleteSchedule ? `Are you sure you want to delete the schedule for ${deleteSchedule.boat.name} on ${format(new Date(deleteSchedule.date), 'PPP')}? This action cannot be undone.` : ''}
+    onConfirm={handleDeleteConfirm}
+    onCancel={handleDeleteCancel}
+/>
