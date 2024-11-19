@@ -263,6 +263,11 @@ export default {
     dateTime: 'Date & Time',
     bookings: 'Bookings',
     overview: 'Overview',
+    bookingsOverTime: 'Bookings Over Time',
+    upcomingSchedules: 'Upcoming Schedules',
+    totalBoats: 'Total Boats',
+    activeBoats: 'Active Boats',
+    bookingsByDay: 'Bookings by Day',
     cards: {}
   }
 };
