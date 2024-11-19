@@ -181,131 +181,128 @@
     </div>
   {/if}
 
-  <div class="bg-white rounded-lg shadow overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >Image</th
-            >
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >Name</th
-            >
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >Description</th
-            >
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >Capacity</th
-            >
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >Booked Dates</th
-            >
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >Actions</th
-            >
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          {#each boats as boat}
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <img
-                  src={boat.imageUrl || '/images/default-boat.jpg'}
-                  alt={boat.name}
-                  class="h-12 w-16 object-cover rounded"
-                  on:error={(e) => (e.currentTarget.src = '/images/default-boat.jpg')}
-                />
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm font-medium text-gray-900">{boat.name}</div>
-              </td>
-              <td class="px-6 py-4">
-                <div class="text-sm text-gray-900">
-                  {boat.description || 'No description'}
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{boat.capacity} divers</div>
-              </td>
-              <td class="px-6 py-4">
-                <div class="text-sm text-gray-900">
-                  {getBookedDatesString(boat)}
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <div class="flex space-x-4">
-                  <button
-                    on:click={() => editBoat(boat)}
-                    class="inline-flex items-center p-1.5 text-blue-600 hover:text-blue-900 hover:bg-blue-100 rounded-full"
-                    title="Edit boat"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-5 h-5"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                      />
-                    </svg>
-                  </button>
-                  <form
-                    method="POST"
-                    action="?/delete"
-                    use:enhance={() => {
-                      loading = true;
-                      return async ({ result }) => {
-                        if (result.type === 'success') {
-                          await invalidateAll();
-                        }
-                        loading = false;
-                      };
-                    }}
-                    class="inline"
-                  >
-                    <input type="hidden" name="id" value={boat.id} />
-                    <button
-                      type="submit"
-                      class="inline-flex items-center p-1.5 text-red-600 hover:text-red-900 hover:bg-red-100 rounded-full"
-                      disabled={loading || boat.schedules.some((s) => s.bookings.length > 0)}
-                      title={boat.schedules.some((s) => s.bookings.length > 0)
-                        ? 'Cannot delete boat with existing bookings'
-                        : 'Delete boat'}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                        />
-                      </svg>
-                    </button>
-                  </form>
-                </div>
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
+  {#if boats.length === 0}
+    <div class="text-center py-12">
+      <h3 class="text-lg font-medium text-gray-900 mb-2">No boats available</h3>
+      <p class="text-gray-500">Add your first boat to get started.</p>
     </div>
-  </div>
+  {:else}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {#each boats as boat}
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+          <div class="aspect-w-16 aspect-h-9">
+            <img
+              src={boat.imageUrl || '/images/default-boat.jpg'}
+              alt={boat.name}
+              class="w-full h-48 object-cover"
+            />
+          </div>
+          <div class="p-6">
+            <h2 class="text-xl font-semibold mb-2">{boat.name}</h2>
+            <p class="text-gray-600 mb-4">
+              {boat.description || 'No description available.'}
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-1 text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                </svg>
+                <span class="text-sm">{boat.capacity} divers</span>
+              </div>
+              <div class="flex items-center space-x-1 text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
+                <span class="text-sm">{boat.schedules.length} {boat.schedules.length === 1 ? 'schedule' : 'schedules'}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-200 p-4">
+            <div class="flex justify-end space-x-2">
+              <button
+                type="button"
+                class="inline-flex items-center p-1.5 text-blue-600 hover:text-blue-900 hover:bg-blue-100 rounded-full"
+                on:click={() => editBoat(boat)}
+                disabled={loading}
+                title="Edit boat"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-5 h-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                  />
+                </svg>
+              </button>
+              <form
+                action="?/delete"
+                method="POST"
+                use:enhance={() => {
+                  loading = true;
+                  return async ({ result }) => {
+                    if (result.type === 'success') {
+                      await invalidateAll();
+                    }
+                    loading = false;
+                  };
+                }}
+                class="inline"
+              >
+                <input type="hidden" name="id" value={boat.id} />
+                <button
+                  type="submit"
+                  class="inline-flex items-center p-1.5 text-red-600 hover:text-red-900 hover:bg-red-100 rounded-full"
+                  disabled={loading}
+                  title="Delete boat"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-5 h-5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                    />
+                  </svg>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {/each}
+    </div>
+  {/if}
 </div>
+
+<style>
+  /* Add aspect ratio support */
+  .aspect-w-16 {
+    position: relative;
+    padding-bottom: 56.25%;
+  }
+
+  .aspect-w-16 > img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    object-fit: cover;
+    object-position: center;
+  }
+</style>
