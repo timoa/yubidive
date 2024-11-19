@@ -1,11 +1,11 @@
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
 import type { User } from '@prisma/client';
 
 interface AuthUser {
   id: string;
   email: string;
   name: string;
-  role: 'customer' | 'admin';
+  role: 'member' | 'admin';
 }
 
 export class AuthError extends Error {
@@ -28,16 +28,15 @@ export function isAuthenticated(): boolean {
   return authenticated;
 }
 
-export function hasRole(requiredRole: 'customer' | 'admin'): boolean {
-  let hasRequiredRole = false;
-  user.subscribe((value) => {
-    if (value && requiredRole === 'customer') {
-      hasRequiredRole = true;
-    } else if (value && value.role === requiredRole) {
-      hasRequiredRole = true;
-    }
-  })();
-  return hasRequiredRole;
+export function hasRole(requiredRole: 'member' | 'admin'): boolean {
+  const value = get(user);
+  if (!value) return false;
+
+  if (value && requiredRole === 'member') {
+    return ['member', 'admin'].includes(value.role);
+  }
+
+  return value.role === requiredRole;
 }
 
 export async function signIn(

@@ -19,6 +19,7 @@ export default {
     bookNow: 'Réserver',
     confirmBooking: 'Confirmer la réservation',
     cancel: 'Annuler',
+    save: 'Enregistrer',
     of: 'sur',
     welcome: 'Bienvenue, {name}',
     profile: 'Votre Profil'

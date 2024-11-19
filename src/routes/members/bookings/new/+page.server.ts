@@ -5,8 +5,8 @@ import type { Actions } from './$types';
 import { requireRole } from '$lib/server/auth-utils';
 
 export const load: PageServerLoad = async (event) => {
-  // Ensure only customers and admins can access this route
-  const user = await requireRole(event, ['customer', 'admin']);
+  // Ensure only members and admins can access this route
+  const user = await requireRole(event, ['member', 'admin']);
 
   const scheduleId = event.url.searchParams.get('scheduleId');
   if (!scheduleId) {
@@ -38,7 +38,7 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
   default: async (event) => {
     try {
-      const user = await requireRole(event, ['customer', 'admin']);
+      const user = await requireRole(event, ['member', 'admin']);
       const formData = await event.request.formData();
       const scheduleId = formData.get('scheduleId') as string;
 

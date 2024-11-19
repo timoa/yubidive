@@ -3,7 +3,7 @@ import { sequence } from '@sveltejs/kit/hooks';
 import { prisma } from '$lib/prisma';
 
 const protectedPaths = [
-  { path: '/members/boats', role: 'customer' },
+  { path: '/members/boats', role: 'member' },
   { path: '/backend/schedules', role: 'admin' },
   { path: '/backend/bookings', role: 'admin' },
   { path: '/backend/boats', role: 'admin' }
@@ -50,7 +50,7 @@ const authorizationCheck: Handle = async ({ event, resolve }) => {
       throw redirect(303, '/');
     }
 
-    if (protection.role === 'customer' && !['customer', 'admin'].includes(event.locals.user.role)) {
+    if (protection.role === 'member' && !['member', 'admin'].includes(event.locals.user.role)) {
       throw redirect(303, '/');
     }
   }

@@ -12,7 +12,7 @@ declare global {
         id: string;
         email: string;
         name: string;
-        role: 'customer' | 'admin';
+        role: 'member' | 'admin';
       } | null;
     }
     interface PageData {
@@ -20,7 +20,7 @@ declare global {
         id: string;
         email: string;
         name: string;
-        role: 'customer' | 'admin';
+        role: 'member' | 'admin';
       } | null;
     }
     // interface PageState {}

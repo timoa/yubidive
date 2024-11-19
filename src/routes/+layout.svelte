@@ -13,7 +13,7 @@
 
   $: user = $page.data.user;
   $: isAdmin = user?.role === 'admin';
-  $: isCustomer = user?.role === 'customer';
+  $: isMember = user?.role === 'member';
 
   afterNavigate(() => {
     isProfileMenuOpen = false;
@@ -31,14 +31,14 @@
       name: $_('common.boats'),
       href: '/members/boats',
       requireAuth: true,
-      requireCustomer: true,
+      requireMember: true,
       hideWhenAdmin: true
     },
     {
       name: $_('common.myBookings'),
       href: '/members/bookings',
       requireAuth: true,
-      requireCustomer: true
+      requireMember: true
     },
     { name: $_('common.boats'), href: '/backend/boats', requireAuth: true, requireAdmin: true },
     {
@@ -75,7 +75,7 @@
 
   $: console.log('User Role:', user?.role);
   $: console.log('Is Admin:', isAdmin);
-  $: console.log('Is Customer:', isCustomer);
+  $: console.log('Is Member:', isMember);
 </script>
 
 <svelte:window on:click={handleClickOutside} />
@@ -90,7 +90,7 @@
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             {#each navigation as item}
-              {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireCustomer || isCustomer) && (!item.hideWhenAdmin || !isAdmin)}
+              {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireMember || isMember) && (!item.hideWhenAdmin || !isAdmin)}
                 <a
                   href={item.href}
                   class:text-gray-900={$page.url.pathname === item.href}
@@ -216,7 +216,7 @@
       <div class="sm:hidden" id="mobile-menu">
         <div class="pt-2 pb-3 space-y-1">
           {#each navigation as item}
-            {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireCustomer || isCustomer) && (!item.hideWhenAdmin || !isAdmin)}
+            {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireMember || isMember) && (!item.hideWhenAdmin || !isAdmin)}
               <a
                 href={item.href}
                 class={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${

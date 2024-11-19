@@ -1,11 +1,11 @@
 import { prisma } from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { requireCustomer } from '$lib/server/auth-utils';
+import { requireMember } from '$lib/server/auth-utils';
 
 export const load: PageServerLoad = async (event) => {
-  // Ensure only customers can access this route
-  await requireCustomer(event);
+  // Ensure only members can access this route
+  await requireMember(event);
 
   try {
     const boats = await prisma.boat.findMany({

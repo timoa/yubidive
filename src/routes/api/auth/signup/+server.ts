@@ -86,7 +86,7 @@ export async function POST({ request, cookies }: RequestEvent) {
         email,
         password: hashedPassword,
         name,
-        role: 'customer' // Default role for new users
+        role: 'member' // Default role for new users
       },
       select: {
         id: true,

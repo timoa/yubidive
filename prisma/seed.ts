@@ -17,16 +17,16 @@ async function main() {
     }
   });
 
-  // Create customer user
-  const customerPassword = await bcrypt.hash('customer123', 10);
-  const customer = await prisma.user.upsert({
-    where: { email: 'customer@example.com' },
+  // Create member user
+  const memberPassword = await bcrypt.hash('member123', 10);
+  const member = await prisma.user.upsert({
+    where: { email: 'member@example.com' },
     update: {},
     create: {
-      email: 'customer@example.com',
-      password: customerPassword,
-      name: 'Test Customer',
-      role: 'customer'
+      email: 'member@example.com',
+      password: memberPassword,
+      name: 'John Doe',
+      role: 'member'
     }
   });
 
@@ -80,6 +80,17 @@ async function main() {
     }
   });
 
+  const schedule3 = await prisma.boatSchedule.upsert({
+    where: { id: '49c3d4e5-f6a1-5b2c-9d3e-4f5a6b7c8d54' },
+    update: {},
+    create: {
+      id: '49c3d4e5-f6a1-5b2c-9d3e-4f5a6b7c8d54',
+      startDateTime: new Date('2024-11-30T08:00:00Z'),
+      endDateTime: new Date('2024-11-30T11:00:00Z'),
+      boatId: seaExplorer.id
+    }
+  });
+
   // Create a booking
   const booking1 = await prisma.booking.upsert({
     where: { id: 'c3d4e5f6-a1b2-6c3d-0e4f-5a6b7c8d9e0f' },
@@ -88,11 +99,11 @@ async function main() {
       id: 'c3d4e5f6-a1b2-6c3d-0e4f-5a6b7c8d9e0f',
       status: 'confirmed',
       scheduleId: schedule1.id,
-      userId: customer.id
+      userId: member.id
     }
   });
 
-  console.log({ admin, customer, seaExplorer, reefDiver, schedule1, schedule2, booking1 });
+  console.log({ admin, member, seaExplorer, reefDiver, schedule1, schedule2, schedule3, booking1 });
 }
 
 main()
