@@ -22,7 +22,30 @@ export default {
     save: 'Enregistrer',
     of: 'sur',
     welcome: 'Bienvenue, {name}',
-    profile: 'Votre Profil'
+    profile: 'Votre Profil',
+    months: {
+      january: 'Janvier',
+      february: 'Février',
+      march: 'Mars',
+      april: 'Avril',
+      may: 'Mai',
+      june: 'Juin',
+      july: 'Juillet',
+      august: 'Août',
+      september: 'Septembre',
+      october: 'Octobre',
+      november: 'Novembre',
+      december: 'Décembre'
+    },
+    weekDays: {
+      sunday: 'Dim',
+      monday: 'Lun',
+      tuesday: 'Mar',
+      wednesday: 'Mer',
+      thursday: 'Jeu',
+      friday: 'Ven',
+      saturday: 'Sam'
+    }
   },
   boats: {
     manageBoats: 'Gérer les bateaux',
@@ -231,6 +254,20 @@ export default {
   },
   dashboard: {
     title: 'Tableau de bord',
+    welcome: 'Bienvenue, {name}',
+    upcomingBookings: 'Réservations à venir',
+    availableDives: 'Plongées disponibles',
+    noUpcomingBookings: 'Aucune réservation à venir',
+    noAvailableDives: 'Aucune plongée disponible pour le moment',
+    viewAllBookings: 'Voir toutes les réservations',
+    viewAllSchedules: 'Voir tous les horaires',
+    bookNow: 'Réserver',
+    spots: 'places',
+    statistics: 'Statistiques',
+    totalBookings: 'Total des réservations',
+    totalRevenue: 'Revenu total',
+    activeUsers: 'Utilisateurs actifs',
+    lastBookings: 'Dernières réservations',
     overview: "Vue d'ensemble",
     cards: {
       totalBoats: 'Total des bateaux',
@@ -255,36 +292,11 @@ export default {
     },
     totalBoats: 'Total des bateaux',
     activeBoats: 'Bateaux actifs',
-    totalBookings: 'Total des réservations',
-    upcomingBookings: 'Réservations à venir',
     bookingsOverTime: 'Réservations dans le temps',
     bookingsByDay: 'Réservations par jour',
     upcomingSchedules: 'Sorties à venir',
     boat: 'Bateau',
     dateTime: 'Date & Heure',
-    bookings: 'Réservations',
-    months: {
-      january: 'Janvier',
-      february: 'Février',
-      march: 'Mars',
-      april: 'Avril',
-      may: 'Mai',
-      june: 'Juin',
-      july: 'Juillet',
-      august: 'Août',
-      september: 'Septembre',
-      october: 'Octobre',
-      november: 'Novembre',
-      december: 'Décembre'
-    },
-    weekDays: {
-      sunday: 'Dim',
-      monday: 'Lun',
-      tuesday: 'Mar',
-      wednesday: 'Mer',
-      thursday: 'Jeu',
-      friday: 'Ven',
-      saturday: 'Sam'
-    }
+    bookings: 'Réservations'
   }
 };

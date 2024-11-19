@@ -3,7 +3,7 @@ import { redirect, error } from '@sveltejs/kit';
 
 export async function requireUser(event: RequestEvent) {
   const user = event.locals.user;
-  if (!user || user.role !== 'member') {
+  if (!user) {
     throw redirect(303, '/auth/signin');
   }
   return event.locals.user;
@@ -11,7 +11,7 @@ export async function requireUser(event: RequestEvent) {
 
 export async function requireAdmin(event: RequestEvent) {
   const user = await requireUser(event);
-  if (!user || user.role !== 'admin') {
+  if (user.role !== 'admin') {
     throw error(403, 'Unauthorized');
   }
   return user;
@@ -19,7 +19,7 @@ export async function requireAdmin(event: RequestEvent) {
 
 export async function requireMember(event: RequestEvent) {
   const user = await requireUser(event);
-  if (!user || user.role !== 'member') {
+  if (user.role !== 'member') {
     throw error(403, 'Unauthorized');
   }
   return user;
@@ -27,7 +27,7 @@ export async function requireMember(event: RequestEvent) {
 
 export async function requireRole(event: RequestEvent, roles: string[]) {
   const user = await requireUser(event);
-  if (!user || !roles.includes(user.role)) {
+  if (!roles.includes(user.role)) {
     throw error(403, 'Unauthorized');
   }
   return user;

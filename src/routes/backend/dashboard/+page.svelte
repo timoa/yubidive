@@ -44,7 +44,7 @@
         type: 'line',
         data: {
           labels: data.stats.bookingsOverTime.labels.map((i) =>
-            $_(`dashboard.months.${monthKeys[i]}`)
+            $_(`common.months.${monthKeys[i]}`)
           ),
           datasets: [
             {
@@ -75,7 +75,7 @@
         type: 'bar',
         data: {
           labels: data.stats.bookingsByDay.labels.map((i) =>
-            $_(`dashboard.weekDays.${weekDayKeys[i]}`)
+            $_(`common.weekDays.${weekDayKeys[i]}`)
           ),
           datasets: [
             {

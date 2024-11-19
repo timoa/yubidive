@@ -25,7 +25,30 @@ export default {
     openUserMenu: 'Open user menu',
     openMainMenu: 'Open main menu',
     welcome: 'Welcome, {name}',
-    profile: 'Your Profile'
+    profile: 'Your Profile',
+    months: {
+      january: 'January',
+      february: 'February',
+      march: 'March',
+      april: 'April',
+      may: 'May',
+      june: 'June',
+      july: 'July',
+      august: 'August',
+      september: 'September',
+      october: 'October',
+      november: 'November',
+      december: 'December'
+    },
+    weekDays: {
+      sunday: 'Sun',
+      monday: 'Mon',
+      tuesday: 'Tue',
+      wednesday: 'Wed',
+      thursday: 'Thu',
+      friday: 'Fri',
+      saturday: 'Sat'
+    }
   },
   boats: {
     title: 'Boats',
@@ -222,38 +245,24 @@ export default {
   },
   dashboard: {
     title: 'Dashboard',
-    totalBoats: 'Total Boats',
-    activeBoats: 'Active Boats',
-    totalBookings: 'Total Bookings',
+    welcome: 'Welcome, {name}',
     upcomingBookings: 'Upcoming Bookings',
-    bookingsOverTime: 'Bookings Over Time',
-    bookingsByDay: 'Bookings by Day',
-    upcomingSchedules: 'Upcoming Schedules',
+    availableDives: 'Available Dives',
+    noUpcomingBookings: 'No upcoming bookings',
+    noAvailableDives: 'No available dives at the moment',
+    viewAllBookings: 'View All Bookings',
+    viewAllSchedules: 'View All Schedules',
+    bookNow: 'Book Now',
+    spots: 'spots',
+    statistics: 'Statistics',
+    totalBookings: 'Total Bookings',
+    totalRevenue: 'Total Revenue',
+    activeUsers: 'Active Users',
+    lastBookings: 'Last Bookings',
     boat: 'Boat',
     dateTime: 'Date & Time',
     bookings: 'Bookings',
-    months: {
-      january: 'January',
-      february: 'February',
-      march: 'March',
-      april: 'April',
-      may: 'May',
-      june: 'June',
-      july: 'July',
-      august: 'August',
-      september: 'September',
-      october: 'October',
-      november: 'November',
-      december: 'December'
-    },
-    weekDays: {
-      sunday: 'Sun',
-      monday: 'Mon',
-      tuesday: 'Tue',
-      wednesday: 'Wed',
-      thursday: 'Thu',
-      friday: 'Fri',
-      saturday: 'Sat'
-    }
+    overview: 'Overview',
+    cards: {}
   }
 };

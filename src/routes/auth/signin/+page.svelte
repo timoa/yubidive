@@ -30,20 +30,26 @@
     loading = true;
     error = '';
 
-    const result = await signIn(email, password);
+    try {
+      const result = await signIn(email, password);
 
-    if (result.success) {
-      await invalidateAll(); // Invalidate all page data to refresh navigation
-      // Get the redirectTo parameter or use default based on user role
-      const redirectTo =
-        $page.url.searchParams.get('redirectTo') ||
-        (result.user?.role === 'admin' ? '/backend/bookings' : '/members/boats');
-      goto(redirectTo);
-    } else {
-      error = $_('auth.signIn.errors.invalidCredentials');
+      if (result.success) {
+        // Get the redirectTo parameter or use default based on user role
+        const redirectTo =
+          $page.url.searchParams.get('redirectTo') ||
+          (result.user?.role === 'admin' ? '/backend/dashboard' : '/members/dashboard');
+
+        // Make sure we wait for both operations
+        await invalidateAll();
+        await goto(redirectTo, { replaceState: true });
+      } else {
+        error = $_('auth.signIn.errors.invalidCredentials');
+      }
+    } catch (err) {
+      error = $_('auth.signIn.errors.unexpectedError');
+    } finally {
+      loading = false;
     }
-
-    loading = false;
   }
 </script>
 

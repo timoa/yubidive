@@ -28,6 +28,13 @@
       requireAdmin: true
     },
     {
+      name: $_('dashboard.title'),
+      href: '/members/dashboard',
+      requireAuth: true,
+      requireMember: true,
+      hideWhenAdmin: true
+    },
+    {
       name: $_('common.boats'),
       href: '/members/boats',
       requireAuth: true,
