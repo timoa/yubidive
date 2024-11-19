@@ -100,7 +100,7 @@
             : 'text-gray-500 hover:text-gray-700'}"
           on:click={() => (activeTab = 'active')}
         >
-          Active Bookings
+          Upcoming Bookings
           {#if activeBookings.length > 0}
             <span class="ml-2 bg-primary-100 text-primary-600 py-0.5 px-2 rounded-full text-xs">
               {activeBookings.length}
@@ -123,7 +123,7 @@
       </nav>
     </div>
 
-    <!-- Active Bookings Tab -->
+    <!-- Upcoming Bookings Tab -->
     {#if activeTab === 'active'}
       {#if activeBookings.length === 0}
         <div class="text-center py-12">
@@ -163,7 +163,7 @@
               />
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">No active bookings</h3>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No upcoming bookings</h3>
           <p class="text-gray-500">Your upcoming dives will appear here</p>
         </div>
       {:else}
