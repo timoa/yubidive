@@ -23,7 +23,7 @@ export const load: PageServerLoad = async (event) => {
     });
 
     if (!schedule) {
-      throw error(404, 'Schedule not found');
+      throw error(404, 'invalidSchedule');
     }
 
     return {
@@ -31,21 +31,23 @@ export const load: PageServerLoad = async (event) => {
       user
     };
   } catch (err) {
-    throw error(500, 'Failed to load schedule');
+    throw error(500, 'bookingFailed');
   }
 };
 
 export const actions: Actions = {
   default: async (event) => {
-    const user = await requireRole(event, ['customer', 'admin']);
-    const formData = await event.request.formData();
-    const scheduleId = formData.get('scheduleId') as string;
-
-    if (!scheduleId) {
-      throw error(400, 'Missing schedule ID');
-    }
-
     try {
+      const user = await requireRole(event, ['customer', 'admin']);
+      const formData = await event.request.formData();
+      const scheduleId = formData.get('scheduleId') as string;
+
+      if (!scheduleId) {
+        console.error('Missing scheduleId in form data');
+        throw error(400, { message: 'invalidSchedule' });
+      }
+
+      console.log('Looking up schedule:', scheduleId);
       const schedule = await prisma.boatSchedule.findUnique({
         where: { id: scheduleId },
         include: {
@@ -55,15 +57,18 @@ export const actions: Actions = {
       });
 
       if (!schedule) {
-        throw error(404, 'Schedule not found');
+        console.error('Schedule not found:', scheduleId);
+        throw error(404, { message: 'invalidSchedule' });
       }
 
       // Check if there are available spots
       if (schedule.bookings.length >= schedule.boat.capacity) {
-        throw error(400, 'No available spots for this schedule');
+        console.error('No available spots for schedule:', scheduleId);
+        throw error(400, { message: 'noSpotsAvailable' });
       }
 
       // Check if user already has a booking for this schedule
+      console.log('Checking for existing booking - userId:', user.id, 'scheduleId:', scheduleId);
       const existingBooking = await prisma.booking.findFirst({
         where: {
           userId: user.id,
@@ -72,21 +77,40 @@ export const actions: Actions = {
       });
 
       if (existingBooking) {
-        throw error(400, 'You already have a booking for this schedule');
+        console.error('User already has a booking:', user.id, scheduleId);
+        throw error(400, { message: 'alreadyBooked' });
       }
 
       // Create the booking
-      await prisma.booking.create({
+      console.log('Creating booking - userId:', user.id, 'scheduleId:', scheduleId);
+      const booking = await prisma.booking.create({
         data: {
           userId: user.id,
-          scheduleId: scheduleId
+          scheduleId: scheduleId,
+          status: 'confirmed' // Set initial status
         }
       });
 
-      throw redirect(303, '/members/bookings');
+      console.log('Booking created successfully:', booking.id);
+      return { success: true, bookingId: booking.id };
     } catch (err) {
-      if (err instanceof Response) throw err;
-      throw error(500, 'Failed to create booking');
+      console.error('Error creating booking:', err);
+
+      // Handle Prisma errors specifically
+      if (err.code === 'P2002') {
+        throw error(400, { message: 'alreadyBooked' });
+      } else if (err.code === 'P2003') {
+        throw error(400, { message: 'invalidSchedule' });
+      } else if (err.code === 'P2025') {
+        throw error(404, { message: 'invalidSchedule' });
+      }
+
+      // If it's already an HTTP error, rethrow it
+      if (err.status && err.body?.message) {
+        throw err;
+      }
+
+      throw error(500, { message: 'bookingFailed' });
     }
   }
 };

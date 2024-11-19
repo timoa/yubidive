@@ -1,18 +1,17 @@
 import { prisma } from '$lib/prisma';
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { requireAdmin } from '$lib/server/auth-utils';
 
 export const load: PageServerLoad = async (event) => {
-  // Ensure only admins can access this route
-  await requireAdmin(event);
-
   try {
+    await requireAdmin(event);
+
     const boats = await prisma.boat.findMany({
       include: {
         schedules: {
           where: {
-            date: {
+            startDateTime: {
               gte: new Date()
             }
           },
@@ -34,86 +33,104 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
   create: async (event) => {
-    await requireAdmin(event);
-
-    const formData = await event.request.formData();
-    const name = formData.get('name') as string;
-    const description = formData.get('description') as string;
-    const capacity = parseInt(formData.get('capacity') as string);
-    const imageUrl = formData.get('imageUrl') as string;
-
-    if (!name || !capacity) {
-      throw error(400, 'Name and capacity are required');
-    }
-
     try {
+      await requireAdmin(event);
+
+      const data = await event.request.formData();
+      const name = data.get('name')?.toString();
+      const description = data.get('description')?.toString();
+      const capacity = parseInt(data.get('capacity')?.toString() || '0');
+      const imageUrl = data.get('imageUrl')?.toString();
+      const status = data.get('status')?.toString() || 'ACTIVE';
+
+      if (!name) {
+        return fail(400, { error: 'Name is required' });
+      }
+
+      if (!capacity || capacity <= 0) {
+        return fail(400, { error: 'Capacity must be a positive number' });
+      }
+
       await prisma.boat.create({
         data: {
           name,
-          description,
+          description: description || '',
           capacity,
-          imageUrl
+          imageUrl: imageUrl || '',
+          status
         }
       });
-
       return { success: true };
     } catch (err) {
       console.error('Error creating boat:', err);
-      throw error(500, 'Failed to create boat');
+      if (err instanceof Error) {
+        return fail(500, { error: err.message });
+      }
+      return fail(500, { error: 'Failed to create boat' });
     }
   },
 
   update: async (event) => {
-    await requireAdmin(event);
-
-    const formData = await event.request.formData();
-    const id = formData.get('id') as string;
-    const name = formData.get('name') as string;
-    const description = formData.get('description') as string;
-    const capacity = parseInt(formData.get('capacity') as string);
-    const imageUrl = formData.get('imageUrl') as string;
-
-    if (!id || !name || !capacity) {
-      throw error(400, 'ID, name, and capacity are required');
-    }
-
     try {
+      await requireAdmin(event);
+
+      const data = await event.request.formData();
+      const id = data.get('id')?.toString();
+      const name = data.get('name')?.toString();
+      const description = data.get('description')?.toString();
+      const capacity = parseInt(data.get('capacity')?.toString() || '0');
+      const imageUrl = data.get('imageUrl')?.toString();
+      const status = data.get('status')?.toString();
+
+      if (!id || !name) {
+        return fail(400, { error: 'ID and name are required' });
+      }
+
+      if (!capacity || capacity <= 0) {
+        return fail(400, { error: 'Capacity must be a positive number' });
+      }
+
       await prisma.boat.update({
         where: { id },
         data: {
           name,
-          description,
+          description: description || '',
           capacity,
-          imageUrl
+          imageUrl: imageUrl || '',
+          status
         }
       });
-
       return { success: true };
     } catch (err) {
       console.error('Error updating boat:', err);
-      throw error(500, 'Failed to update boat');
+      if (err instanceof Error) {
+        return fail(500, { error: err.message });
+      }
+      return fail(500, { error: 'Failed to update boat' });
     }
   },
 
   delete: async (event) => {
-    await requireAdmin(event);
-
-    const formData = await event.request.formData();
-    const id = formData.get('id') as string;
-
-    if (!id) {
-      throw error(400, 'Boat ID is required');
-    }
-
     try {
+      await requireAdmin(event);
+
+      const data = await event.request.formData();
+      const id = data.get('id')?.toString();
+
+      if (!id) {
+        return fail(400, { error: 'ID is required' });
+      }
+
       await prisma.boat.delete({
         where: { id }
       });
-
       return { success: true };
     } catch (err) {
       console.error('Error deleting boat:', err);
-      throw error(500, 'Failed to delete boat');
+      if (err instanceof Error) {
+        return fail(500, { error: err.message });
+      }
+      return fail(500, { error: 'Failed to delete boat' });
     }
   }
 };

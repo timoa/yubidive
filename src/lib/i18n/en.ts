@@ -14,9 +14,12 @@ export default {
     english: 'English',
     french: 'Français',
     allBookings: 'All Bookings',
-    bookNewDive: 'Book New Dive',
+    bookNewDive: 'Book a Dive',
     viewBoats: 'View Boats',
     bookNow: 'Book Now',
+    confirmBooking: 'Confirm Booking',
+    cancel: 'Cancel',
+    of: 'of',
     viewAvailableBoats: 'View Available Boats',
     openUserMenu: 'Open user menu',
     openMainMenu: 'Open main menu',
@@ -24,35 +27,44 @@ export default {
     profile: 'Your Profile'
   },
   boats: {
-    manageBoats: 'Manage Boats',
-    addNewBoat: 'Add New Boat',
-    editBoat: 'Edit Boat',
-    deleteBoat: 'Delete Boat',
-    noDescription: 'No description available',
-    divers: 'divers',
-    schedule: 'schedule',
-    schedules: 'schedules',
-    availableBoats: 'Available Boats',
-    capacity: 'Capacity',
-    spotsLeft: 'spots left',
-    boatDetails: 'Boat Details',
-    boatName: 'Boat Name',
+    title: 'Boats',
+    createBoat: 'Create Boat',
+    name: 'Name',
     description: 'Description',
+    capacity: 'Capacity',
+    imageUrl: 'Image URL',
     status: 'Status',
     active: 'Active',
     inactive: 'Inactive',
     maintenance: 'Maintenance',
-    save: 'Save',
+    divers: 'divers',
+    schedule: 'schedule',
+    schedules: 'schedules',
+    bookedDates: 'Booked dates',
+    create: 'Create',
     cancel: 'Cancel',
+    save: 'Save',
+    edit: 'Edit',
+    delete: 'Delete',
+    deleteConfirm: 'Are you sure you want to delete this boat?',
+    yes: 'Yes',
+    no: 'No',
+    manageBoats: 'Manage Boats',
+    addNewBoat: 'Add a Boat',
+    editBoat: 'Edit Boat',
+    deleteBoat: 'Delete Boat',
+    noDescription: 'No description available',
+    availableBoats: 'Available Boats',
+    spotsLeft: 'spots left',
+    boatDetails: 'Boat Details',
+    boatName: 'Boat Name',
     confirmDelete: 'Confirm Delete',
     deleteConfirmation: 'Are you sure you want to delete this boat?',
     noBoatsAvailable: 'No boats available',
     checkBackLater: 'Check back later to see available boats and schedules.',
     boatList: 'Boat List',
     actions: 'Actions',
-    imageUrl: 'Image URL',
     noBookings: 'No bookings',
-    bookedDates: 'Booked Dates',
     noBoats: 'No boats',
     addFirstBoat: 'Add your first boat to get started.',
     upcomingSchedules: 'Upcoming Schedules',
@@ -60,25 +72,30 @@ export default {
     fullyBooked: 'Fully Booked'
   },
   schedules: {
-    boatSchedules: 'Boat Schedules',
-    createNewSchedule: 'Create New Schedule',
-    selectBoat: 'Select Boat',
-    selectABoat: 'Select a boat...',
+    title: 'Schedules',
     date: 'Date',
+    time: 'Time',
     startTime: 'Start Time',
     endTime: 'End Time',
+    availableSpots: 'Available Spots',
+    bookingFor: 'Booking For',
     upcomingSchedules: 'Upcoming Schedules',
     createSchedule: 'Create Schedule',
+    editSchedule: 'Edit Schedule',
+    deleteSchedule: 'Delete Schedule',
+    noSchedules: 'No schedules available',
+    addFirstSchedule: 'Add your first schedule',
+    boatSchedules: 'Boat Schedules',
+    addSchedule: 'Add Schedule',
     boat: 'Boat',
-    time: 'Time',
+    dateTime: 'Date & Time',
+    startDateTime: 'Start Date & Time',
+    endDateTime: 'End Date & Time',
     bookings: 'Bookings',
     actions: 'Actions',
-    deleteSchedule: 'Delete Schedule',
-    deleteConfirmation:
-      'Are you sure you want to delete the schedule for {boat} on {date}? This action cannot be undone.',
     save: 'Save',
     cancel: 'Cancel',
-    editSchedule: 'Edit schedule'
+    deleteConfirmation: 'Are you sure you want to delete the schedule for {boat} on {date}?'
   },
   bookings: {
     noUpcomingBookings: 'No upcoming bookings',
@@ -97,7 +114,11 @@ export default {
     status: {
       upcoming: 'Upcoming',
       past: 'Past'
-    }
+    },
+    alreadyBooked: 'You already have a booking for this schedule',
+    noSpotsAvailable: 'No spots available for this schedule',
+    bookingFailed: 'Failed to create booking. Please try again later.',
+    invalidSchedule: 'Invalid schedule selected'
   },
   home: {
     hero: {
@@ -136,6 +157,7 @@ export default {
     editProfile: 'Edit Profile',
     fullName: 'Full name',
     emailAddress: 'Email address',
+    details: 'Member Details',
     changePassword: 'Change Password (Optional)',
     keepCurrentPassword: 'Leave blank to keep your current password',
     currentPassword: 'Current password',
@@ -151,6 +173,13 @@ export default {
       invalidEmail: 'Invalid email format',
       passwordsDoNotMatch: 'Passwords do not match'
     }
+  },
+  schedule: {
+    date: 'Date',
+    time: 'Time',
+    boat: 'Boat',
+    availableSpots: 'Available Spots',
+    details: 'Schedule Details'
   },
   auth: {
     signIn: {
@@ -189,6 +218,42 @@ export default {
         userNotFound: 'No account found with this email address',
         tooManyRequests: 'Too many attempts. Please try again later.'
       }
+    }
+  },
+  dashboard: {
+    title: 'Dashboard',
+    totalBoats: 'Total Boats',
+    activeBoats: 'Active Boats',
+    totalBookings: 'Total Bookings',
+    upcomingBookings: 'Upcoming Bookings',
+    bookingsOverTime: 'Bookings Over Time',
+    bookingsByDay: 'Bookings by Day',
+    upcomingSchedules: 'Upcoming Schedules',
+    boat: 'Boat',
+    dateTime: 'Date & Time',
+    bookings: 'Bookings',
+    months: {
+      january: 'January',
+      february: 'February',
+      march: 'March',
+      april: 'April',
+      may: 'May',
+      june: 'June',
+      july: 'July',
+      august: 'August',
+      september: 'September',
+      october: 'October',
+      november: 'November',
+      december: 'December'
+    },
+    weekDays: {
+      sunday: 'Sun',
+      monday: 'Mon',
+      tuesday: 'Tue',
+      wednesday: 'Wed',
+      thursday: 'Thu',
+      friday: 'Fri',
+      saturday: 'Sat'
     }
   }
 };

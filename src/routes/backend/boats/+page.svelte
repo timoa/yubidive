@@ -6,24 +6,27 @@
   import { formatDate } from '$lib/utils/dateFormat';
 
   export let data: PageData;
-  let boats = data.boats;
+  $: boats = data.boats;
 
   // Form states
   let showCreateForm = false;
   let editingBoat = null;
   let loading = false;
+  let errorMessage = '';
 
   // Form data
   let name = '';
   let description = '';
   let capacity = '';
   let imageUrl = '';
+  let status = 'ACTIVE';
 
   function resetForm() {
     name = '';
     description = '';
     capacity = '';
     imageUrl = '';
+    status = 'ACTIVE';
     editingBoat = null;
     showCreateForm = false;
   }
@@ -34,15 +37,30 @@
     description = boat.description || '';
     capacity = boat.capacity.toString();
     imageUrl = boat.imageUrl || '';
+    status = boat.status;
     showCreateForm = true;
   }
 
-  function getBookedDatesString(boat) {
-    const dates = boat.schedules
-      .filter((s) => s.bookings.length > 0)
-      .map((s) => formatDate(s.date))
-      .join(', ');
-    return dates || $_('boats.noBookings');
+  function getBookingsCount(boat) {
+    return boat.schedules?.length || 0;
+  }
+
+  async function handleSubmit(event) {
+    loading = true;
+    errorMessage = '';
+    return async ({ result }) => {
+      loading = false;
+      if (result.type === 'success') {
+        await invalidateAll();
+        resetForm();
+      } else if (result.type === 'redirect' && result.location === '/auth/signin') {
+        window.location.href = '/auth/signin';
+      } else if (result.type === 'error') {
+        errorMessage = result.error?.message || 'An error occurred while saving the boat';
+      } else if (result.data?.error) {
+        errorMessage = result.data.error;
+      }
+    };
   }
 </script>
 
@@ -78,18 +96,28 @@
       <form
         method="POST"
         action="?/{editingBoat ? 'update' : 'create'}"
-        use:enhance={() => {
-          loading = true;
-          return async ({ result }) => {
-            if (result.type === 'success') {
-              await invalidateAll();
-              resetForm();
-            }
-            loading = false;
-          };
-        }}
+        use:enhance={handleSubmit}
         class="space-y-4"
       >
+        {#if errorMessage}
+          <div class="bg-red-50 border-l-4 border-red-400 p-4">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-red-700">{errorMessage}</p>
+              </div>
+            </div>
+          </div>
+        {/if}
+
         {#if editingBoat}
           <input type="hidden" name="id" value={editingBoat.id} />
         {/if}
@@ -141,12 +169,28 @@
             >{$_('boats.imageUrl')}</label
           >
           <input
-            type="url"
-            id="imageUrl"
+            type="text"
             name="imageUrl"
+            id="imageUrl"
             bind:value={imageUrl}
             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
           />
+        </div>
+
+        <div>
+          <label for="status" class="block text-sm font-medium text-gray-700"
+            >{$_('boats.status')} *</label
+          >
+          <select
+            name="status"
+            id="status"
+            bind:value={status}
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+          >
+            <option value="ACTIVE">{$_('boats.active')}</option>
+            <option value="INACTIVE">{$_('boats.inactive')}</option>
+            <option value="MAINTENANCE">{$_('boats.maintenance')}</option>
+          </select>
         </div>
 
         <div class="flex justify-end space-x-3">
@@ -208,48 +252,44 @@
                 {boat.capacity}
                 {$_('boats.divers')}
               </div>
-              <p>{$_('boats.status')}: {boat.status}</p>
-              <p>{$_('boats.bookedDates')}: {getBookedDatesString(boat)}</p>
-            </div>
-          </div>
-          <div class="border-t border-gray-200 p-4">
-            <div class="flex justify-end space-x-2">
-              <button
-                type="button"
-                class="inline-flex items-center p-1.5 text-blue-600 hover:text-blue-900 hover:bg-blue-100 rounded-full"
-                on:click={() => editBoat(boat)}
-              >
+              <div class="mt-2 flex items-center text-sm text-gray-500">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                   stroke="currentColor"
-                  class="w-5 h-5"
+                  class="mr-1.5 h-5 w-5 text-gray-400"
                 >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
                   />
                 </svg>
-              </button>
-              <form
-                method="POST"
-                action="?/delete"
-                use:enhance={() => {
-                  return async ({ result }) => {
-                    if (result.type === 'success') {
-                      await invalidateAll();
-                    }
-                  };
-                }}
-                class="inline-block"
+                {getBookingsCount(boat)}
+                {$_(`boats.${getBookingsCount(boat) === 1 ? 'schedule' : 'schedules'}`)}
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-gray-200 p-4">
+            <div class="flex justify-between items-center">
+              <span
+                class={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
+                  boat.status === 'ACTIVE'
+                    ? 'bg-emerald-50 text-emerald-600'
+                    : boat.status === 'MAINTENANCE'
+                      ? 'bg-amber-50 text-amber-600'
+                      : 'bg-red-50 text-red-700'
+                }`}
               >
-                <input type="hidden" name="id" value={boat.id} />
+                {$_(`boats.${(boat.status || 'ACTIVE').toLowerCase()}`)}
+              </span>
+              <div class="flex space-x-2">
                 <button
-                  type="submit"
-                  class="inline-flex items-center p-1.5 text-red-600 hover:text-red-900 hover:bg-red-100 rounded-full"
+                  type="button"
+                  class="inline-flex items-center p-1.5 text-blue-600 hover:text-blue-900 hover:bg-blue-100 rounded-full"
+                  on:click={() => editBoat(boat)}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -262,11 +302,44 @@
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
                     />
                   </svg>
                 </button>
-              </form>
+                <form
+                  method="POST"
+                  action="?/delete"
+                  use:enhance={() => {
+                    return async ({ result }) => {
+                      if (result.type === 'success') {
+                        await invalidateAll();
+                      }
+                    };
+                  }}
+                  class="inline-block"
+                >
+                  <input type="hidden" name="id" value={boat.id} />
+                  <button
+                    type="submit"
+                    class="inline-flex items-center p-1.5 text-red-600 hover:text-red-900 hover:bg-red-100 rounded-full"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-5 h-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                      />
+                    </svg>
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>

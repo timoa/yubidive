@@ -63,9 +63,8 @@ async function main() {
     update: {},
     create: {
       id: 'a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c8d',
-      date: new Date('2024-11-23'),
-      startTime: new Date('2024-11-23T08:00:00Z'),
-      endTime: new Date('2024-11-23T11:00:00Z'),
+      startDateTime: new Date('2024-11-23T08:00:00Z'),
+      endDateTime: new Date('2024-11-23T11:00:00Z'),
       boatId: seaExplorer.id
     }
   });
@@ -75,9 +74,8 @@ async function main() {
     update: {},
     create: {
       id: 'b2c3d4e5-f6a1-5b2c-9d3e-4f5a6b7c8d9e',
-      date: new Date('2024-11-30'),
-      startTime: new Date('2024-11-30T08:00:00Z'),
-      endTime: new Date('22024-11-30T11:00:00Z'),
+      startDateTime: new Date('2024-11-30T08:00:00Z'),
+      endDateTime: new Date('2024-11-30T11:00:00Z'),
       boatId: reefDiver.id
     }
   });

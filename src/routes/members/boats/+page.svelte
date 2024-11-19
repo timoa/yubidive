@@ -72,21 +72,27 @@
                     <div class="flex justify-between items-center py-2 px-3 bg-gray-50 rounded">
                       <div>
                         <div class="font-medium">
-                          {formatDate(schedule.date)}
+                          {formatDate(schedule.startDateTime)}
                         </div>
                         <div class="text-sm text-gray-500">
-                          {formatTime(schedule.startTime)} -
-                          {formatTime(schedule.endTime)}
+                          {formatTime(schedule.startDateTime)} -
+                          {formatTime(schedule.endDateTime)}
                         </div>
                       </div>
                       <div class="text-right">
-                        <div class="text-sm font-medium">
-                          {schedule.availableSpots}
-                          {$_('boats.spotsLeft')}
+                        <div class="text-sm font-medium mb-2">
+                          {#if schedule.availableSpots > 0}
+                            <span class="text-emerald-600">
+                              {schedule.availableSpots}
+                              {$_('boats.spotsLeft')}
+                            </span>
+                          {:else}
+                            <span class="text-red-600">{$_('boats.fullyBooked')}</span>
+                          {/if}
                         </div>
                         <a
                           href="/members/bookings/new?scheduleId={schedule.id}"
-                          class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded text-white bg-primary-600 hover:bg-primary-700"
+                          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                           class:opacity-50={schedule.availableSpots === 0}
                           class:cursor-not-allowed={schedule.availableSpots === 0}
                           class:pointer-events-none={schedule.availableSpots === 0}

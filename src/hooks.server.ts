@@ -5,7 +5,8 @@ import { prisma } from '$lib/prisma';
 const protectedPaths = [
   { path: '/members/boats', role: 'customer' },
   { path: '/backend/schedules', role: 'admin' },
-  { path: '/backend/bookings', role: 'admin' }
+  { path: '/backend/bookings', role: 'admin' },
+  { path: '/backend/boats', role: 'admin' }
 ];
 
 const authenticationCheck: Handle = async ({ event, resolve }) => {

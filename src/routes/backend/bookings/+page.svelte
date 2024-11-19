@@ -9,8 +9,10 @@
   export let data: PageData;
 
   $: bookings = data.bookings;
-  $: activeBookings = bookings.filter((booking) => !isPastBooking(booking.boatSchedule.date));
-  $: pastBookings = bookings.filter((booking) => isPastBooking(booking.boatSchedule.date));
+  $: activeBookings = bookings.filter(
+    (booking) => !isPastBooking(booking.boatSchedule.startDateTime)
+  );
+  $: pastBookings = bookings.filter((booking) => isPastBooking(booking.boatSchedule.startDateTime));
 
   let activeTab = 'active';
   let cancelBooking: any = null;
@@ -34,7 +36,7 @@
     cancelBooking = null;
   }
 
-  function isPastBooking(date: string) {
+  function isPastBooking(date: string | Date) {
     return new Date(date) <= new Date();
   }
 </script>
@@ -195,7 +197,7 @@
                               clip-rule="evenodd"
                             />
                           </svg>
-                          {formatDate(booking.boatSchedule.date)}
+                          {formatDate(booking.boatSchedule.startDateTime)}
                         </div>
                         <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                           <svg
@@ -210,8 +212,8 @@
                               clip-rule="evenodd"
                             />
                           </svg>
-                          {formatTime(booking.boatSchedule.startTime)} - {formatTime(
-                            booking.boatSchedule.endTime
+                          {formatTime(booking.boatSchedule.startDateTime)} - {formatTime(
+                            booking.boatSchedule.endDateTime
                           )}
                         </div>
                         <div class="mt-2 flex items-center text-sm sm:mt-0">
@@ -324,7 +326,7 @@
                               clip-rule="evenodd"
                             />
                           </svg>
-                          {formatDate(booking.boatSchedule.date)}
+                          {formatDate(booking.boatSchedule.startDateTime)}
                         </div>
                         <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                           <svg
@@ -339,8 +341,8 @@
                               clip-rule="evenodd"
                             />
                           </svg>
-                          {formatTime(booking.boatSchedule.startTime)} - {formatTime(
-                            booking.boatSchedule.endTime
+                          {formatTime(booking.boatSchedule.startDateTime)} - {formatTime(
+                            booking.boatSchedule.endDateTime
                           )}
                         </div>
                         <div class="mt-2 flex items-center text-sm sm:mt-0">
@@ -370,7 +372,7 @@
     ? $_('bookings.cancelConfirmation', {
         values: {
           boat: cancelBooking.boatSchedule.boat.name,
-          date: formatDate(cancelBooking.boatSchedule.date)
+          date: formatDate(cancelBooking.boatSchedule.startDateTime)
         }
       })
     : ''}

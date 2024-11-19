@@ -19,21 +19,21 @@ model Boat {
   capacity    Int
   description String?
   imageUrl    String?
+  status      String        @default("ACTIVE") // ACTIVE, INACTIVE, MAINTENANCE
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   schedules   BoatSchedule[]
 }
 
 model BoatSchedule {
-  id        String    @id @default(uuid())
-  date      DateTime
-  startTime DateTime  @default(now())
-  endTime   DateTime  @default(now())
-  boat      Boat      @relation(fields: [boatId], references: [id])
-  boatId    String
-  bookings  Booking[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            String    @id @default(uuid())
+  startDateTime DateTime
+  endDateTime   DateTime
+  boat          Boat      @relation(fields: [boatId], references: [id])
+  boatId        String
+  bookings      Booking[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Booking {

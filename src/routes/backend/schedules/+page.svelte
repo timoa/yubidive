@@ -12,25 +12,22 @@
   $: boats = data.boats;
 
   let selectedBoat = '';
-  let selectedDate = '';
-  let selectedStartTime = '09:00';
-  let selectedEndTime = '12:00';
+  let selectedStartDateTime = '';
+  let selectedEndDateTime = '';
   let editingSchedule: any = null;
   let deleteSchedule: any = null;
 
   function resetForm() {
     selectedBoat = '';
-    selectedDate = '';
-    selectedStartTime = '09:00';
-    selectedEndTime = '12:00';
+    selectedStartDateTime = '';
+    selectedEndDateTime = '';
   }
 
   function startEdit(schedule: any) {
     editingSchedule = {
       ...schedule,
-      date: format(new Date(schedule.date), 'yyyy-MM-dd'),
-      startTime: format(new Date(schedule.startTime), 'HH:mm'),
-      endTime: format(new Date(schedule.endTime), 'HH:mm')
+      startDateTime: format(new Date(schedule.startDateTime), 'yyyy-MM-ddTHH:mm'),
+      endDateTime: format(new Date(schedule.endDateTime), 'yyyy-MM-ddTHH:mm')
     };
   }
 
@@ -95,43 +92,29 @@
         </select>
       </div>
 
-      <div>
-        <label for="date" class="block text-sm font-medium text-gray-700"
-          >{$_('schedules.date')}</label
-        >
-        <input
-          type="date"
-          id="date"
-          name="date"
-          bind:value={selectedDate}
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          required
-        />
-      </div>
-
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label for="startTime" class="block text-sm font-medium text-gray-700"
-            >{$_('schedules.startTime')}</label
+          <label for="startDateTime" class="block text-sm font-medium text-gray-700"
+            >{$_('schedules.startDateTime')}</label
           >
           <input
-            type="time"
-            id="startTime"
-            name="startTime"
-            bind:value={selectedStartTime}
+            type="datetime-local"
+            id="startDateTime"
+            name="startDateTime"
+            bind:value={selectedStartDateTime}
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             required
           />
         </div>
         <div>
-          <label for="endTime" class="block text-sm font-medium text-gray-700"
-            >{$_('schedules.endTime')}</label
+          <label for="endDateTime" class="block text-sm font-medium text-gray-700"
+            >{$_('schedules.endDateTime')}</label
           >
           <input
-            type="time"
-            id="endTime"
-            name="endTime"
-            bind:value={selectedEndTime}
+            type="datetime-local"
+            id="endDateTime"
+            name="endDateTime"
+            bind:value={selectedEndDateTime}
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             required
           />
@@ -156,10 +139,7 @@
             >{$_('schedules.boat')}</th
           >
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >{$_('schedules.date')}</th
-          >
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >{$_('schedules.time')}</th
+            >{$_('schedules.dateTime')}</th
           >
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >{$_('schedules.bookings')}</th
@@ -191,35 +171,23 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               {#if editingSchedule?.id === schedule.id}
-                <input
-                  type="date"
-                  bind:value={editingSchedule.date}
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              {:else}
-                <div class="text-sm text-gray-900">
-                  {format(new Date(schedule.date), 'PPP')}
-                </div>
-              {/if}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              {#if editingSchedule?.id === schedule.id}
                 <div class="flex space-x-2">
                   <input
-                    type="time"
-                    bind:value={editingSchedule.startTime}
+                    type="datetime-local"
+                    bind:value={editingSchedule.startDateTime}
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                   <input
-                    type="time"
-                    bind:value={editingSchedule.endTime}
+                    type="datetime-local"
+                    bind:value={editingSchedule.endDateTime}
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
               {:else}
                 <div class="text-sm text-gray-900">
-                  {format(new Date(schedule.startTime), 'HH:mm')} - {format(
-                    new Date(schedule.endTime),
+                  {format(new Date(schedule.startDateTime), 'PPP')}
+                  {format(new Date(schedule.startDateTime), 'HH:mm')} - {format(
+                    new Date(schedule.endDateTime),
                     'HH:mm'
                   )}
                 </div>
@@ -247,9 +215,8 @@
                 >
                   <input type="hidden" name="id" value={editingSchedule.id} />
                   <input type="hidden" name="boatId" value={editingSchedule.boatId} />
-                  <input type="hidden" name="date" value={editingSchedule.date} />
-                  <input type="hidden" name="startTime" value={editingSchedule.startTime} />
-                  <input type="hidden" name="endTime" value={editingSchedule.endTime} />
+                  <input type="hidden" name="startDateTime" value={editingSchedule.startDateTime} />
+                  <input type="hidden" name="endDateTime" value={editingSchedule.endDateTime} />
                   <button
                     type="submit"
                     class="inline-flex items-center p-1.5 text-green-600 hover:text-green-900 hover:bg-green-100 rounded-full"
@@ -353,7 +320,7 @@
     ? $_('schedules.deleteConfirmation', {
         values: {
           boat: deleteSchedule.boat.name,
-          date: format(new Date(deleteSchedule.date), 'PPP')
+          date: format(new Date(deleteSchedule.startDateTime), 'PPP')
         }
       })
     : ''}

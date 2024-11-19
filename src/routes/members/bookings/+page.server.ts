@@ -23,7 +23,7 @@ export const load: PageServerLoad = async (event) => {
       orderBy: [
         {
           boatSchedule: {
-            date: 'desc'
+            startDateTime: 'desc'
           }
         },
         {
@@ -53,6 +53,7 @@ export const actions: Actions = {
     }
 
     try {
+      // Get the booking to check if it belongs to the user
       const booking = await prisma.booking.findUnique({
         where: { id: bookingId },
         include: {
@@ -64,24 +65,25 @@ export const actions: Actions = {
         throw error(404, 'Booking not found');
       }
 
-      // Ensure the booking belongs to the user
       if (booking.userId !== user.id) {
         throw error(403, 'Not authorized to cancel this booking');
       }
 
       // Check if the schedule is in the future
-      if (new Date(booking.boatSchedule.date) <= new Date()) {
+      const now = new Date();
+      if (booking.boatSchedule.startDateTime < now) {
         throw error(400, 'Cannot cancel past bookings');
       }
 
-      await prisma.booking.delete({
-        where: { id: bookingId }
+      // Update the booking status to cancelled
+      const updatedBooking = await prisma.booking.update({
+        where: { id: bookingId },
+        data: { status: 'cancelled' }
       });
 
-      return { success: true };
+      return { success: true, booking: updatedBooking };
     } catch (err) {
-      console.error('Error canceling booking:', err);
-      if (err instanceof Response) throw err;
+      console.error('Error cancelling booking:', err);
       throw error(500, 'Failed to cancel booking');
     }
   }

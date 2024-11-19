@@ -12,7 +12,7 @@ export const load: PageServerLoad = async (event) => {
       include: {
         schedules: {
           where: {
-            date: {
+            startDateTime: {
               gte: new Date()
             }
           },
@@ -24,7 +24,7 @@ export const load: PageServerLoad = async (event) => {
             }
           },
           orderBy: {
-            date: 'asc'
+            startDateTime: 'asc'
           }
         }
       }
