@@ -3,6 +3,7 @@
   import { invalidateAll } from '$app/navigation';
   import { validatePassword } from '$lib/validation';
   import PasswordStrengthIndicator from '$lib/components/PasswordStrengthIndicator.svelte';
+  import { _ } from 'svelte-i18n';
 
   const user = $page.data.user;
 
@@ -23,13 +24,13 @@
     confirmPassword: false
   };
 
-  $: nameError = touched.name && !name ? 'Name is required' : '';
+  $: nameError = touched.name && !name ? $_('profile.validation.nameRequired') : '';
 
   $: emailError = touched.email
     ? !email
-      ? 'Email is required'
+      ? $_('profile.validation.emailRequired')
       : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-        ? 'Invalid email format'
+        ? $_('profile.validation.invalidEmail')
         : ''
     : '';
 
@@ -43,7 +44,7 @@
   $: confirmPasswordError =
     touched.confirmPassword && newPassword
       ? confirmPassword !== newPassword
-        ? 'Passwords do not match'
+        ? $_('profile.validation.passwordsDoNotMatch')
         : ''
       : '';
 
@@ -80,17 +81,17 @@
       });
 
       if (response.ok) {
-        success = 'Profile updated successfully';
+        success = $_('profile.profileUpdated');
         currentPassword = '';
         newPassword = '';
         confirmPassword = '';
         await invalidateAll();
       } else {
         const data = await response.json();
-        error = data.error || 'Failed to update profile';
+        error = data.error || $_('profile.updateFailed');
       }
     } catch {
-      error = 'An unexpected error occurred';
+      error = $_('profile.unexpectedError');
     }
 
     loading = false;
@@ -99,7 +100,9 @@
 
 <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Edit Profile</h2>
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      {$_('profile.editProfile')}
+    </h2>
   </div>
 
   <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -144,7 +147,9 @@
 
       <form class="space-y-6" on:submit|preventDefault={handleSubmit}>
         <div>
-          <label for="name" class="block text-sm font-medium text-gray-700"> Full name </label>
+          <label for="name" class="block text-sm font-medium text-gray-700"
+            >{$_('profile.fullName')}</label
+          >
           <div class="mt-1">
             <input
               id="name"
@@ -163,7 +168,9 @@
         </div>
 
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700"> Email address </label>
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >{$_('profile.emailAddress')}</label
+          >
           <div class="mt-1">
             <input
               id="email"
@@ -183,13 +190,13 @@
         </div>
 
         <div class="space-y-1">
-          <p class="block text-sm font-medium text-gray-700">Change Password (Optional)</p>
-          <p class="text-sm text-gray-500">Leave blank to keep your current password</p>
+          <p class="block text-sm font-medium text-gray-700">{$_('profile.changePassword')}</p>
+          <p class="text-sm text-gray-500">{$_('profile.keepCurrentPassword')}</p>
         </div>
 
         <div>
           <label for="current-password" class="block text-sm font-medium text-gray-700">
-            Current password
+            {$_('profile.currentPassword')}
           </label>
           <div class="mt-1">
             <input
@@ -205,7 +212,7 @@
 
         <div>
           <label for="new-password" class="block text-sm font-medium text-gray-700">
-            New password
+            {$_('profile.newPassword')}
           </label>
           <div class="mt-1 space-y-2">
             <input
@@ -228,7 +235,7 @@
 
         <div>
           <label for="confirm-password" class="block text-sm font-medium text-gray-700">
-            Confirm new password
+            {$_('profile.confirmPassword')}
           </label>
           <div class="mt-1">
             <input
@@ -275,7 +282,7 @@
               </svg>
               Updating profile...
             {:else}
-              Update Profile
+              {$_('profile.updateProfile')}
             {/if}
           </button>
         </div>

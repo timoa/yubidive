@@ -1,25 +1,26 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { _ } from 'svelte-i18n';
   import EquipmentIcon from '$lib/components/icons/EquipmentIcon.svelte';
   import CrewIcon from '$lib/components/icons/CrewIcon.svelte';
   import ScheduleIcon from '$lib/components/icons/ScheduleIcon.svelte';
 
   const user = $page.data.user;
 
-  const features = [
+  $: features = [
     {
-      name: 'Professional Equipment',
-      description: 'All our boats are equipped with the latest safety and diving equipment.',
+      name: $_('home.features.items.equipment.title'),
+      description: $_('home.features.items.equipment.description'),
       icon: EquipmentIcon
     },
     {
-      name: 'Experienced Crew',
-      description: 'Our crew members are certified professionals with years of experience.',
+      name: $_('home.features.items.crew.title'),
+      description: $_('home.features.items.crew.description'),
       icon: CrewIcon
     },
     {
-      name: 'Flexible Scheduling',
-      description: 'Choose from various time slots that fit your schedule perfectly.',
+      name: $_('home.features.items.scheduling.title'),
+      description: $_('home.features.items.scheduling.description'),
       icon: ScheduleIcon
     }
   ];
@@ -46,12 +47,11 @@
         </div>
         <div class="relative px-4 py-32 sm:px-6 sm:py-40 lg:py-48 lg:px-8">
           <h1 class="text-center text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-            <span class="block text-white">Experience the Best</span>
-            <span class="block text-primary-200">Scuba Diving Adventures</span>
+            <span class="block text-white">{$_('home.hero.title1')}</span>
+            <span class="block text-primary-200">{$_('home.hero.title2')}</span>
           </h1>
           <p class="mt-6 max-w-lg mx-auto text-center text-xl text-primary-100 sm:max-w-3xl">
-            Discover the underwater world with our fleet of professional diving boats. Book your
-            next diving expedition today.
+            {$_('home.hero.description')}
           </p>
           <div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
             <div class="space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
@@ -59,13 +59,13 @@
                 href={getHref('/members/boats')}
                 class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-primary-700 bg-white hover:bg-primary-50 sm:px-8"
               >
-                View Boats
+                {$_('common.viewBoats')}
               </a>
               <a
                 href={getHref('/members/bookings')}
                 class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-500 bg-opacity-60 hover:bg-opacity-70 sm:px-8"
               >
-                Book Now
+                {$_('common.bookNow')}
               </a>
             </div>
           </div>
@@ -78,14 +78,13 @@
   <div class="relative bg-white py-16 sm:py-24 lg:py-32">
     <div class="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
       <h2 class="text-base font-semibold uppercase tracking-wider text-primary-600">
-        Why Choose Us
+        {$_('home.features.title')}
       </h2>
       <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-        Everything you need for the perfect dive
+        {$_('home.features.subtitle')}
       </p>
       <p class="mt-5 max-w-prose mx-auto text-xl text-gray-500">
-        We provide top-notch diving experiences with professional equipment and experienced crew
-        members.
+        {$_('home.features.description')}
       </p>
       <div class="mt-12">
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -119,17 +118,17 @@
   <div class="bg-primary-700">
     <div class="max-w-2xl mx-auto text-center py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
       <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
-        <span class="block">Ready for your next adventure?</span>
-        <span class="block">Start booking today.</span>
+        <span class="block">{$_('home.cta.title1')}</span>
+        <span class="block">{$_('home.cta.title2')}</span>
       </h2>
       <p class="mt-4 text-lg leading-6 text-primary-200">
-        Join us for an unforgettable diving experience in the most beautiful locations.
+        {$_('home.cta.description')}
       </p>
       <a
         href="/boats"
         class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary-600 bg-white hover:bg-primary-50 sm:w-auto"
       >
-        View Available Boats
+        {$_('common.viewAvailableBoats')}
       </a>
     </div>
   </div>

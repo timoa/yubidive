@@ -1,9 +1,10 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import type { PageData } from './$types';
-  import { format } from 'date-fns';
   import { invalidateAll } from '$app/navigation';
   import ConfirmModal from '$lib/components/ConfirmModal.svelte';
+  import { _ } from 'svelte-i18n';
+  import { formatDate, formatTime } from '$lib/utils/dateFormat';
 
   export let data: PageData;
 
@@ -40,7 +41,7 @@
 
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-8">
-    <h1 class="text-2xl font-bold text-gray-900">All Bookings</h1>
+    <h1 class="text-2xl font-bold text-gray-900">{$_('common.allBookings')}</h1>
   </div>
 
   {#if bookings.length === 0}
@@ -81,22 +82,22 @@
           />
         </svg>
       </div>
-      <h3 class="text-lg font-medium text-gray-900 mb-2">No bookings yet</h3>
-      <p class="text-gray-500">
-        Bookings will appear here once customers start making reservations.
-      </p>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">{$_('bookings.noBookingsYet')}</h3>
+      <p class="text-gray-500">{$_('bookings.bookingsWillAppear')}</p>
     </div>
   {:else}
     <!-- Tabs -->
     <div class="mb-6">
       <nav class="flex space-x-4 border-b border-gray-200" aria-label="Tabs">
         <button
-          class="px-3 py-2 text-sm font-medium {activeTab === 'active'
-            ? 'text-primary-600 border-b-2 border-primary-500'
-            : 'text-gray-500 hover:text-gray-700'}"
+          class={`${
+            activeTab === 'active'
+              ? 'border-primary-500 text-primary-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+          } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
           on:click={() => (activeTab = 'active')}
         >
-          Upcoming Bookings
+          {$_('common.upcomingBookings')}
           {#if activeBookings.length > 0}
             <span class="ml-2 bg-primary-100 text-primary-600 py-0.5 px-2 rounded-full text-xs">
               {activeBookings.length}
@@ -104,12 +105,14 @@
           {/if}
         </button>
         <button
-          class="px-3 py-2 text-sm font-medium {activeTab === 'past'
-            ? 'text-primary-600 border-b-2 border-primary-500'
-            : 'text-gray-500 hover:text-gray-700'}"
+          class={`${
+            activeTab === 'past'
+              ? 'border-primary-500 text-primary-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+          } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
           on:click={() => (activeTab = 'past')}
         >
-          Past Bookings
+          {$_('common.pastBookings')}
           {#if pastBookings.length > 0}
             <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">
               {pastBookings.length}
@@ -159,8 +162,10 @@
               />
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">No upcoming bookings</h3>
-          <p class="text-gray-500">Upcoming bookings will appear here</p>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">
+            {$_('bookings.noUpcomingBookings')}
+          </h3>
+          <p class="text-gray-500">{$_('bookings.upcomingBookingsWillAppear')}</p>
         </div>
       {:else}
         <div class="bg-white shadow-sm overflow-hidden sm:rounded-md">
@@ -174,7 +179,7 @@
                         {booking.boatSchedule.boat.name}
                       </h3>
                       <p class="text-sm text-gray-500">
-                        Booked by: {booking.user.name}
+                        {$_('bookings.bookedBy')}: {booking.user.name}
                       </p>
                       <div class="mt-2 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-6">
                         <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
@@ -190,7 +195,7 @@
                               clip-rule="evenodd"
                             />
                           </svg>
-                          {format(new Date(booking.boatSchedule.date), 'PPP')}
+                          {formatDate(booking.boatSchedule.date)}
                         </div>
                         <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                           <svg
@@ -205,16 +210,15 @@
                               clip-rule="evenodd"
                             />
                           </svg>
-                          {format(new Date(booking.boatSchedule.startTime), 'HH:mm')} - {format(
-                            new Date(booking.boatSchedule.endTime),
-                            'HH:mm'
+                          {formatTime(booking.boatSchedule.startTime)} - {formatTime(
+                            booking.boatSchedule.endTime
                           )}
                         </div>
                         <div class="mt-2 flex items-center text-sm sm:mt-0">
                           <span
                             class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
                           >
-                            Upcoming
+                            {$_('bookings.upcoming')}
                           </span>
                         </div>
                       </div>
@@ -222,9 +226,9 @@
                     <div class="ml-5 flex-shrink-0">
                       <button
                         type="button"
-                        class="inline-flex items-center p-1.5 text-red-600 hover:text-red-900 hover:bg-red-100 rounded-full"
+                        class="inline-flex items-center p-1.5 text-red-600 hover:text-red-900 hover:bg-red-100 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         on:click={() => (cancelBooking = booking)}
-                        aria-label="Cancel booking"
+                        title={$_('common.cancel')}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -237,7 +241,7 @@
                           <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
+                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
                           />
                         </svg>
                       </button>
@@ -289,8 +293,8 @@
               />
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">No past bookings</h3>
-          <p class="text-gray-500">Completed bookings will appear here</p>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">{$_('bookings.noPastBookings')}</h3>
+          <p class="text-gray-500">{$_('bookings.pastBookingsWillAppear')}</p>
         </div>
       {:else}
         <div class="bg-white shadow-sm overflow-hidden sm:rounded-md">
@@ -304,7 +308,7 @@
                         {booking.boatSchedule.boat.name}
                       </h3>
                       <p class="text-sm text-gray-500">
-                        Booked by: {booking.user.name}
+                        {$_('bookings.bookedBy')}: {booking.user.name}
                       </p>
                       <div class="mt-2 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-6">
                         <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
@@ -320,7 +324,7 @@
                               clip-rule="evenodd"
                             />
                           </svg>
-                          {format(new Date(booking.boatSchedule.date), 'PPP')}
+                          {formatDate(booking.boatSchedule.date)}
                         </div>
                         <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                           <svg
@@ -335,16 +339,15 @@
                               clip-rule="evenodd"
                             />
                           </svg>
-                          {format(new Date(booking.boatSchedule.startTime), 'HH:mm')} - {format(
-                            new Date(booking.boatSchedule.endTime),
-                            'HH:mm'
+                          {formatTime(booking.boatSchedule.startTime)} - {formatTime(
+                            booking.boatSchedule.endTime
                           )}
                         </div>
                         <div class="mt-2 flex items-center text-sm sm:mt-0">
                           <span
                             class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800"
                           >
-                            Past
+                            {$_('bookings.past')}
                           </span>
                         </div>
                       </div>
@@ -362,9 +365,14 @@
 
 <ConfirmModal
   isOpen={!!cancelBooking}
-  title="Cancel Booking"
+  title={$_('bookings.cancelBooking')}
   message={cancelBooking
-    ? `Are you sure you want to cancel the booking for ${cancelBooking.boatSchedule.boat.name} on ${format(new Date(cancelBooking.boatSchedule.date), 'PPP')}? This action cannot be undone.`
+    ? $_('bookings.cancelConfirmation', {
+        values: {
+          boat: cancelBooking.boatSchedule.boat.name,
+          date: formatDate(cancelBooking.boatSchedule.date)
+        }
+      })
     : ''}
   onConfirm={handleCancelConfirm}
   onCancel={handleCancelCancel}

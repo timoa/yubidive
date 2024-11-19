@@ -1,8 +1,9 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
-  import { format } from 'date-fns';
   import type { PageData } from './$types';
+  import { _ } from 'svelte-i18n';
+  import { formatDate } from '$lib/utils/dateFormat';
 
   export let data: PageData;
   let boats = data.boats;
@@ -39,15 +40,15 @@
   function getBookedDatesString(boat) {
     const dates = boat.schedules
       .filter((s) => s.bookings.length > 0)
-      .map((s) => format(new Date(s.date), 'PPP'))
+      .map((s) => formatDate(s.date))
       .join(', ');
-    return dates || 'No bookings';
+    return dates || $_('boats.noBookings');
   }
 </script>
 
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold">Manage Boats</h1>
+    <h1 class="text-3xl font-bold">{$_('boats.manageBoats')}</h1>
     <button
       class="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors inline-flex items-center space-x-2"
       on:click={() => {
@@ -65,13 +66,15 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
       </svg>
-      <span>Add New Boat</span>
+      <span>{$_('boats.addNewBoat')}</span>
     </button>
   </div>
 
   {#if showCreateForm}
     <div class="bg-white p-6 rounded-lg shadow mb-8">
-      <h2 class="text-xl font-semibold mb-4">{editingBoat ? 'Edit' : 'Add'} Boat</h2>
+      <h2 class="text-xl font-semibold mb-4">
+        {editingBoat ? $_('boats.editBoat') : $_('boats.addNewBoat')}
+      </h2>
       <form
         method="POST"
         action="?/{editingBoat ? 'update' : 'create'}"
@@ -92,32 +95,36 @@
         {/if}
 
         <div>
-          <label for="name" class="block text-sm font-medium text-gray-700">Name *</label>
+          <label for="name" class="block text-sm font-medium text-gray-700"
+            >{$_('boats.boatName')} *</label
+          >
           <input
             type="text"
             id="name"
             name="name"
             bind:value={name}
             required
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
           />
         </div>
 
         <div>
           <label for="description" class="block text-sm font-medium text-gray-700"
-            >Description</label
+            >{$_('boats.description')}</label
           >
           <textarea
             id="description"
             name="description"
             bind:value={description}
             rows="3"
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
-          ></textarea>
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+          />
         </div>
 
         <div>
-          <label for="capacity" class="block text-sm font-medium text-gray-700">Capacity *</label>
+          <label for="capacity" class="block text-sm font-medium text-gray-700"
+            >{$_('boats.capacity')} *</label
+          >
           <input
             type="number"
             id="capacity"
@@ -125,66 +132,46 @@
             bind:value={capacity}
             required
             min="1"
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
           />
         </div>
 
         <div>
-          <label for="imageUrl" class="block text-sm font-medium text-gray-700">Image URL</label>
+          <label for="imageUrl" class="block text-sm font-medium text-gray-700"
+            >{$_('boats.imageUrl')}</label
+          >
           <input
             type="url"
             id="imageUrl"
             name="imageUrl"
             bind:value={imageUrl}
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
           />
         </div>
 
-        <div class="flex justify-end space-x-3 pt-4">
+        <div class="flex justify-end space-x-3">
           <button
             type="button"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             on:click={resetForm}
-            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 inline-flex items-center space-x-2"
             disabled={loading}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-5 h-5"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            <span>Cancel</span>
+            {$_('boats.cancel')}
           </button>
           <button
             type="submit"
-            class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 inline-flex items-center space-x-2"
+            class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             disabled={loading}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-5 h-5"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-            </svg>
-            <span>{loading ? 'Saving...' : editingBoat ? 'Update Boat' : 'Create Boat'}</span>
+            {$_('boats.save')}
           </button>
         </div>
       </form>
     </div>
-  {/if}
-
-  {#if boats.length === 0}
+  {:else if boats.length === 0}
     <div class="text-center py-12">
-      <h3 class="text-lg font-medium text-gray-900 mb-2">No boats available</h3>
-      <p class="text-gray-500">Add your first boat to get started.</p>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">{$_('boats.noBoats')}</h3>
+      <p class="text-gray-500">{$_('boats.addFirstBoat')}</p>
     </div>
   {:else}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -200,57 +187,37 @@
           <div class="p-6">
             <h2 class="text-xl font-semibold mb-2">{boat.name}</h2>
             <p class="text-gray-600 mb-4">
-              {boat.description || 'No description available.'}
+              {boat.description || $_('boats.noDescription')}
             </p>
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-1 text-gray-500">
+            <div class="text-sm text-gray-500">
+              <div class="mt-2 flex items-center text-sm text-gray-500">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                   stroke="currentColor"
-                  class="w-5 h-5"
+                  class="mr-1.5 h-5 w-5 text-gray-400"
                 >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
+                    d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
                   />
                 </svg>
-                <span class="text-sm">{boat.capacity} divers</span>
+                {boat.capacity}
+                {$_('boats.divers')}
               </div>
-              <div class="flex items-center space-x-1 text-gray-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-5 h-5"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                  />
-                </svg>
-                <span class="text-sm"
-                  >{boat.schedules.length}
-                  {boat.schedules.length === 1 ? 'schedule' : 'schedules'}</span
-                >
-              </div>
+              <p>{$_('boats.status')}: {boat.status}</p>
+              <p>{$_('boats.bookedDates')}: {getBookedDatesString(boat)}</p>
             </div>
           </div>
-
           <div class="border-t border-gray-200 p-4">
             <div class="flex justify-end space-x-2">
               <button
                 type="button"
                 class="inline-flex items-center p-1.5 text-blue-600 hover:text-blue-900 hover:bg-blue-100 rounded-full"
                 on:click={() => editBoat(boat)}
-                disabled={loading}
-                title="Edit boat"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -268,25 +235,21 @@
                 </svg>
               </button>
               <form
-                action="?/delete"
                 method="POST"
+                action="?/delete"
                 use:enhance={() => {
-                  loading = true;
                   return async ({ result }) => {
                     if (result.type === 'success') {
                       await invalidateAll();
                     }
-                    loading = false;
                   };
                 }}
-                class="inline"
+                class="inline-block"
               >
                 <input type="hidden" name="id" value={boat.id} />
                 <button
                   type="submit"
                   class="inline-flex items-center p-1.5 text-red-600 hover:text-red-900 hover:bg-red-100 rounded-full"
-                  disabled={loading}
-                  title="Delete boat"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

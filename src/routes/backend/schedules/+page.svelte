@@ -4,6 +4,7 @@
   import { format } from 'date-fns';
   import { invalidateAll } from '$app/navigation';
   import ConfirmModal from '$lib/components/ConfirmModal.svelte';
+  import { _ } from 'svelte-i18n';
 
   export let data: PageData;
 
@@ -58,11 +59,11 @@
 </script>
 
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-8">Boat Schedules</h1>
+  <h1 class="text-3xl font-bold mb-8">{$_('schedules.boatSchedules')}</h1>
 
   <!-- Create Schedule Form -->
   <div class="bg-white rounded-lg shadow p-6 mb-8">
-    <h2 class="text-xl font-semibold mb-4">Create New Schedule</h2>
+    <h2 class="text-xl font-semibold mb-4">{$_('schedules.createNewSchedule')}</h2>
     <form
       method="POST"
       action="?/create"
@@ -77,7 +78,9 @@
       class="space-y-4"
     >
       <div>
-        <label for="boat" class="block text-sm font-medium text-gray-700">Select Boat</label>
+        <label for="boat" class="block text-sm font-medium text-gray-700"
+          >{$_('schedules.selectBoat')}</label
+        >
         <select
           id="boat"
           name="boatId"
@@ -85,7 +88,7 @@
           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           required
         >
-          <option value="">Select a boat...</option>
+          <option value="">{$_('schedules.selectABoat')}</option>
           {#each boats as boat}
             <option value={boat.id}>{boat.name}</option>
           {/each}
@@ -93,7 +96,9 @@
       </div>
 
       <div>
-        <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+        <label for="date" class="block text-sm font-medium text-gray-700"
+          >{$_('schedules.date')}</label
+        >
         <input
           type="date"
           id="date"
@@ -106,7 +111,9 @@
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label for="startTime" class="block text-sm font-medium text-gray-700">Start Time</label>
+          <label for="startTime" class="block text-sm font-medium text-gray-700"
+            >{$_('schedules.startTime')}</label
+          >
           <input
             type="time"
             id="startTime"
@@ -117,7 +124,9 @@
           />
         </div>
         <div>
-          <label for="endTime" class="block text-sm font-medium text-gray-700">End Time</label>
+          <label for="endTime" class="block text-sm font-medium text-gray-700"
+            >{$_('schedules.endTime')}</label
+          >
           <input
             type="time"
             id="endTime"
@@ -133,7 +142,7 @@
         type="submit"
         class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
-        Create Schedule
+        {$_('schedules.createSchedule')}
       </button>
     </form>
   </div>
@@ -144,19 +153,19 @@
       <thead class="bg-gray-50">
         <tr>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >Boat</th
+            >{$_('schedules.boat')}</th
           >
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >Date</th
+            >{$_('schedules.date')}</th
           >
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >Time</th
+            >{$_('schedules.time')}</th
           >
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >Bookings</th
+            >{$_('schedules.bookings')}</th
           >
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >Actions</th
+            >{$_('schedules.actions')}</th
           >
         </tr>
       </thead>
@@ -234,7 +243,7 @@
                       }
                     };
                   }}
-                  class="inline-block"
+                  class="flex items-center justify-end space-x-2"
                 >
                   <input type="hidden" name="id" value={editingSchedule.id} />
                   <input type="hidden" name="boatId" value={editingSchedule.boatId} />
@@ -244,7 +253,7 @@
                   <button
                     type="submit"
                     class="inline-flex items-center p-1.5 text-green-600 hover:text-green-900 hover:bg-green-100 rounded-full"
-                    title="Save changes"
+                    title={$_('schedules.save')}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -261,31 +270,35 @@
                       />
                     </svg>
                   </button>
-                </form>
-                <button
-                  type="button"
-                  class="inline-flex items-center p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full"
-                  on:click={cancelEdit}
-                  title="Cancel editing"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
+                  <button
+                    type="button"
+                    class="inline-flex items-center p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full"
+                    on:click={cancelEdit}
+                    title={$_('schedules.cancel')}
                   >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-5 h-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </form>
               {:else}
                 <div class="flex items-center justify-end space-x-2">
                   <button
                     type="button"
                     class="inline-flex items-center p-1.5 text-blue-600 hover:text-blue-900 hover:bg-blue-100 rounded-full"
                     on:click={() => startEdit(schedule)}
-                    title="Edit schedule"
+                    title={$_('schedules.editSchedule')}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -306,7 +319,7 @@
                     type="button"
                     class="inline-flex items-center p-1.5 text-red-600 hover:text-red-900 hover:bg-red-100 rounded-full"
                     on:click={() => (deleteSchedule = schedule)}
-                    title="Delete schedule"
+                    title={$_('schedules.deleteSchedule')}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -335,9 +348,14 @@
 
 <ConfirmModal
   isOpen={!!deleteSchedule}
-  title="Delete Schedule"
+  title={$_('schedules.deleteSchedule')}
   message={deleteSchedule
-    ? `Are you sure you want to delete the schedule for ${deleteSchedule.boat.name} on ${format(new Date(deleteSchedule.date), 'PPP')}? This action cannot be undone.`
+    ? $_('schedules.deleteConfirmation', {
+        values: {
+          boat: deleteSchedule.boat.name,
+          date: format(new Date(deleteSchedule.date), 'PPP')
+        }
+      })
     : ''}
   onConfirm={handleDeleteConfirm}
   onCancel={handleDeleteCancel}
