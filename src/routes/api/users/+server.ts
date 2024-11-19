@@ -26,7 +26,7 @@ export async function GET() {
 export async function POST({ request }: RequestEvent) {
   try {
     const body = await request.json();
-    const { email, name, role = 'member' } = body;
+    const { email, name, role = 'MEMBER' } = body;
 
     // Check if user with email already exists
     const existingUser = await prisma.user.findUnique({

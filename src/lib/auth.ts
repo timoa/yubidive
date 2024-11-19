@@ -19,13 +19,10 @@ export class AuthError extends Error {
 }
 
 export const user = writable<AuthUser | null>(null);
+export const isLoading = writable<boolean>(false);
 
 export function isAuthenticated(): boolean {
-  let authenticated = false;
-  user.subscribe((value) => {
-    authenticated = value !== null;
-  })();
-  return authenticated;
+  return get(user) !== null;
 }
 
 export function hasRole(requiredRole: 'member' | 'admin'): boolean {
@@ -44,6 +41,7 @@ export async function signIn(
   password: string
 ): Promise<{ success: boolean; error?: AuthError; user?: AuthUser }> {
   try {
+    isLoading.set(true);
     const response = await fetch('/api/auth/signin', {
       method: 'POST',
       headers: {
@@ -62,7 +60,7 @@ export async function signIn(
       id: data.user.id,
       email: data.user.email,
       name: data.user.name,
-      role: data.user.role
+      role: data.user.role.toLowerCase()
     };
 
     user.set(userData);
@@ -75,6 +73,8 @@ export async function signIn(
       success: false,
       error: new AuthError('An unexpected error occurred', 'UNKNOWN_ERROR')
     };
+  } finally {
+    isLoading.set(false);
   }
 }
 

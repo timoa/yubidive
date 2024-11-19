@@ -1,7 +1,7 @@
 <script lang="ts">
   import '../app.css';
   import { page } from '$app/stores';
-  import { signOut } from '$lib/auth';
+  import { signOut, user as authUser, isLoading } from '$lib/auth';
   import { goto, invalidateAll } from '$app/navigation';
   import { afterNavigate } from '$app/navigation';
   import { _ } from 'svelte-i18n';
@@ -12,8 +12,17 @@
   let isProfileMenuOpen = false;
 
   $: user = $page.data.user;
-  $: isAdmin = user?.role === 'admin';
-  $: isMember = user?.role === 'member';
+  $: userRole = user?.role?.toUpperCase() || null;
+  $: isAdmin = userRole === 'ADMIN';
+  $: isMember = userRole === 'MEMBER';
+
+  // Subscribe to auth store changes
+  $: if ($authUser) {
+    user = $authUser;
+    userRole = $authUser.role.toUpperCase();
+    isAdmin = userRole === 'ADMIN';
+    isMember = userRole === 'MEMBER';
+  }
 
   afterNavigate(() => {
     isProfileMenuOpen = false;
@@ -45,7 +54,8 @@
       name: $_('common.myBookings'),
       href: '/members/bookings',
       requireAuth: true,
-      requireMember: true
+      requireMember: true,
+      hideWhenAdmin: true
     },
     { name: $_('common.boats'), href: '/backend/boats', requireAuth: true, requireAdmin: true },
     {
@@ -59,14 +69,15 @@
       href: '/backend/bookings',
       requireAuth: true,
       requireAdmin: true
-    }
+    },
+    { name: $_('users.title'), href: '/backend/users', requireAuth: true, requireAdmin: true }
   ];
 
   async function handleSignOut() {
     await signOut();
     await invalidateAll();
     isProfileMenuOpen = false;
-    goto('/');
+    await goto('/');
   }
 
   // Close dropdown when clicking outside
@@ -80,7 +91,9 @@
     }
   }
 
-  $: console.log('User Role:', user?.role);
+  $: console.log('Page Data:', $page.data);
+  $: console.log('User:', user);
+  $: console.log('User Role:', userRole);
   $: console.log('Is Admin:', isAdmin);
   $: console.log('Is Member:', isMember);
 </script>
@@ -97,14 +110,14 @@
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             {#each navigation as item}
-              {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireMember || isMember) && (!item.hideWhenAdmin || !isAdmin)}
+              {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireMember || isMember || isAdmin) && (!item.hideWhenAdmin || !isAdmin)}
                 <a
                   href={item.href}
-                  class:text-gray-900={$page.url.pathname === item.href}
-                  class:border-primary-500={$page.url.pathname === item.href}
-                  class:text-gray-500={$page.url.pathname !== item.href}
-                  class:border-transparent={$page.url.pathname !== item.href}
-                  class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  class="inline-flex items-center px-1 pt-1 border-b-2 {$page.url.pathname.startsWith(
+                    item.href
+                  )
+                    ? 'border-primary-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'}"
                 >
                   {item.name}
                 </a>
@@ -112,50 +125,53 @@
             {/each}
           </div>
         </div>
-        <div class="hidden sm:ml-6 sm:flex sm:items-center">
+
+        <div class="flex items-center">
           <LanguageSelector />
+
           {#if user}
-            <div class="ml-3 relative flex items-center space-x-4">
-              <!-- Profile dropdown -->
-              <div class="relative">
-                <button
-                  type="button"
-                  class="flex items-center max-w-xs text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                  id="user-menu-button"
-                  aria-expanded="false"
-                  aria-haspopup="true"
-                  on:click={() => (isProfileMenuOpen = !isProfileMenuOpen)}
-                >
-                  <span class="sr-only">{$_('common.openUserMenu')}</span>
-                  <span
-                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-primary-100"
+            <div class="hidden sm:ml-3 sm:flex sm:items-center">
+              <div class="ml-3 relative">
+                <div>
+                  <button
+                    type="button"
+                    class="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                    id="user-menu-button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    on:click={() => (isProfileMenuOpen = !isProfileMenuOpen)}
                   >
-                    <span class="text-sm font-medium leading-none text-primary-700">
+                    <span class="sr-only">Open user menu</span>
+                    <div
+                      class="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600"
+                    >
                       {user.name[0].toUpperCase()}
-                    </span>
-                  </span>
-                </button>
+                    </div>
+                  </button>
+                </div>
 
                 {#if isProfileMenuOpen}
                   <div
-                    id="user-menu-dropdown"
-                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="user-menu-button"
                     tabindex="-1"
+                    id="user-menu-dropdown"
                   >
-                    <div class="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
-                      {$_('common.welcome', { values: { name: user.name } })}
+                    <div class="px-4 py-2">
+                      <div class="text-base font-medium text-gray-800">{user.name}</div>
+                      <div class="text-sm font-medium text-gray-500">{user.email}</div>
+                      <div class="mt-2">
+                        <span
+                          class="px-2 py-1 text-xs rounded-full {user.role === 'ADMIN'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-blue-100 text-blue-800'}"
+                        >
+                          {$_(`users.roles.${user.role?.toLowerCase() || 'member'}`)}
+                        </span>
+                      </div>
                     </div>
-                    <a
-                      href="/profile"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
-                      tabindex="-1"
-                    >
-                      {$_('common.profile')}
-                    </a>
                     <button
                       type="button"
                       class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -170,51 +186,57 @@
               </div>
             </div>
           {:else}
-            <div class="flex space-x-4">
+            <div class="hidden sm:flex sm:items-center sm:ml-6 sm:space-x-4">
               <a
                 href="/auth/signin"
-                class="text-gray-500 hover:text-gray-700 inline-flex items-center px-3 py-1.5 text-sm font-medium"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
                 {$_('common.signIn')}
               </a>
               <a
                 href="/auth/signup"
-                class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
                 {$_('common.signUp')}
               </a>
             </div>
           {/if}
-        </div>
-        <div class="-mr-2 flex items-center sm:hidden">
-          <button
-            type="button"
-            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
-            aria-controls="mobile-menu"
-            aria-expanded="false"
-            on:click={() => (isMenuOpen = !isMenuOpen)}
-          >
-            <span class="sr-only">{$_('common.openMainMenu')}</span>
-            {#if !isMenuOpen}
-              <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+
+          <div class="-mr-2 flex items-center sm:hidden">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+              aria-controls="mobile-menu"
+              aria-expanded="false"
+              on:click={() => (isMenuOpen = !isMenuOpen)}
+            >
+              <span class="sr-only">Open main menu</span>
+              <svg
+                class="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                {#if isMenuOpen}
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                {:else}
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                {/if}
               </svg>
-            {:else}
-              <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            {/if}
-          </button>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -223,55 +245,53 @@
       <div class="sm:hidden" id="mobile-menu">
         <div class="pt-2 pb-3 space-y-1">
           {#each navigation as item}
-            {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireMember || isMember) && (!item.hideWhenAdmin || !isAdmin)}
+            {#if (!item.requireAuth || user) && (!item.requireAdmin || isAdmin) && (!item.requireMember || isMember || isAdmin) && (!item.hideWhenAdmin || !isAdmin)}
               <a
                 href={item.href}
-                class={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                  $page.url.pathname === item.href
-                    ? 'bg-primary-50 border-primary-500 text-primary-700'
-                    : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-                }`}
+                class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium {$page.url.pathname.startsWith(
+                  item.href
+                )
+                  ? 'bg-primary-50 border-primary-500 text-primary-700'
+                  : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800'}"
               >
                 {item.name}
               </a>
             {/if}
           {/each}
         </div>
-        <div class="px-4">
-          <LanguageSelector />
-        </div>
         {#if user}
-          <div class="flex items-center px-4 mt-3">
-            <div class="flex-shrink-0">
-              <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                <span class="text-primary-700 font-medium">
-                  {user.name[0]}
-                </span>
+          <div class="pt-4 pb-3 border-t border-gray-200">
+            <div class="flex items-center px-4">
+              <div class="flex-shrink-0">
+                <div
+                  class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 text-lg"
+                >
+                  {user.name[0].toUpperCase()}
+                </div>
+              </div>
+              <div class="ml-3">
+                <div class="text-base font-medium text-gray-800">{user.name}</div>
+                <div class="text-sm font-medium text-gray-500 flex items-center gap-2">
+                  {user.email}
+                  <span
+                    class="px-2 py-1 text-xs rounded-full {user.role === 'ADMIN'
+                      ? 'bg-red-100 text-red-800'
+                      : 'bg-blue-100 text-blue-800'}"
+                  >
+                    {$_(`users.roles.${user.role?.toLowerCase() || 'member'}`)}
+                  </span>
+                </div>
               </div>
             </div>
-            <div class="ml-3">
-              <div class="text-base font-medium text-gray-800">
-                {user.name}
-              </div>
-              <div class="text-sm font-medium text-gray-500">
-                {user.email}
-              </div>
+            <div class="mt-3 space-y-1">
+              <button
+                type="button"
+                class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                on:click={handleSignOut}
+              >
+                {$_('common.signOut')}
+              </button>
             </div>
-          </div>
-          <div class="mt-3 space-y-1">
-            <a
-              href="/profile"
-              class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
-            >
-              Edit Profile
-            </a>
-            <button
-              type="button"
-              class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
-              on:click={handleSignOut}
-            >
-              Sign Out
-            </button>
           </div>
         {:else}
           <div class="pt-4 pb-3 border-t border-gray-200">
@@ -280,13 +300,13 @@
                 href="/auth/signin"
                 class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
               >
-                Sign In
+                {$_('common.signIn')}
               </a>
               <a
                 href="/auth/signup"
                 class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
               >
-                Sign Up
+                {$_('common.signUp')}
               </a>
             </div>
           </div>

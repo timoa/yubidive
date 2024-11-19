@@ -11,7 +11,7 @@ export async function requireUser(event: RequestEvent) {
 
 export async function requireAdmin(event: RequestEvent) {
   const user = await requireUser(event);
-  if (user.role !== 'admin') {
+  if (user.role !== 'ADMIN') {
     throw error(403, 'Unauthorized');
   }
   return user;
@@ -19,7 +19,7 @@ export async function requireAdmin(event: RequestEvent) {
 
 export async function requireMember(event: RequestEvent) {
   const user = await requireUser(event);
-  if (user.role !== 'member') {
+  if (user.role !== 'MEMBER') {
     throw error(403, 'Unauthorized');
   }
   return user;
@@ -27,7 +27,8 @@ export async function requireMember(event: RequestEvent) {
 
 export async function requireRole(event: RequestEvent, roles: string[]) {
   const user = await requireUser(event);
-  if (!roles.includes(user.role)) {
+  const userRole = user.role.toUpperCase();
+  if (!roles.map((r) => r.toUpperCase()).includes(userRole)) {
     throw error(403, 'Unauthorized');
   }
   return user;

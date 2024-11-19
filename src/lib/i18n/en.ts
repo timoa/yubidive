@@ -59,7 +59,7 @@ export default {
     imageUrl: 'Image URL',
     status: 'Status',
     active: 'Active',
-    inactive: 'Inactive',
+    inactive: 'Unvailable',
     maintenance: 'Maintenance',
     divers: 'divers',
     schedule: 'schedule',
@@ -269,5 +269,29 @@ export default {
     activeBoats: 'Active Boats',
     bookingsByDay: 'Bookings by Day',
     cards: {}
+  },
+  users: {
+    title: 'Users',
+    manageUsers: 'Manage Users',
+    editUser: 'Edit User',
+    createUser: 'Create User',
+    name: 'Name',
+    email: 'Email',
+    role: 'Role',
+    activeBookings: 'Active Bookings',
+    password: 'Password',
+    roles: {
+      admin: 'Administrator',
+      member: 'Member'
+    },
+    actions: {
+      save: 'Save Changes',
+      cancel: 'Cancel',
+      create: 'Create'
+    },
+    messages: {
+      updateSuccess: 'User updated successfully',
+      updateError: 'Failed to update user'
+    }
   }
 };

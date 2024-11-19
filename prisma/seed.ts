@@ -50,7 +50,7 @@ async function main() {
     create: {
       id: 'f67d2c1b-3a8e-4d9f-9e5b-6c2a1b3d4e5f',
       name: 'Reef Diver',
-      capacity: 8,
+      capacity: 4,
       description: 'Ideal for intimate diving experiences and reef exploration.',
       imageUrl:
         'https://images.unsplash.com/photo-1650806139441-7f48e053df1e?q=80&w=1024&auto=format&fit=crop'

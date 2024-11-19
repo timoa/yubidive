@@ -62,7 +62,7 @@ export default {
     description: 'Description',
     status: 'Statut',
     active: 'Actif',
-    inactive: 'Inactif',
+    inactive: 'Indisponible',
     maintenance: 'En maintenance',
     save: 'Enregistrer',
     cancel: 'Annuler',
@@ -298,5 +298,29 @@ export default {
     boat: 'Bateau',
     dateTime: 'Date & Heure',
     bookings: 'Réservations'
+  },
+  users: {
+    title: 'Utilisateurs',
+    manageUsers: 'Gérer les utilisateurs',
+    editUser: "Modifier l'utilisateur",
+    createUser: 'Créer un utilisateur',
+    name: 'Nom',
+    email: 'Email',
+    role: 'Rôle',
+    password: 'Mot de passe',
+    activeBookings: 'Réservations actives',
+    roles: {
+      admin: 'Administrateur',
+      member: 'Membre'
+    },
+    actions: {
+      save: 'Enregistrer les modifications',
+      cancel: 'Annuler',
+      create: 'Créer'
+    },
+    messages: {
+      updateSuccess: 'Utilisateur mis à jour avec succès',
+      updateError: "Échec de la mise à jour de l'utilisateur"
+    }
   }
 };

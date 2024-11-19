@@ -3,13 +3,19 @@ import { sequence } from '@sveltejs/kit/hooks';
 import { prisma } from '$lib/prisma';
 
 const protectedPaths = [
-  { path: '/members/boats', role: 'member' },
-  { path: '/backend/schedules', role: 'admin' },
-  { path: '/backend/bookings', role: 'admin' },
-  { path: '/backend/boats', role: 'admin' }
+  { path: '/members/boats', role: 'MEMBER' },
+  { path: '/backend/schedules', role: 'ADMIN' },
+  { path: '/backend/bookings', role: 'ADMIN' },
+  { path: '/backend/boats', role: 'ADMIN' },
+  { path: '/backend/users', role: 'ADMIN' }
 ];
 
 const authenticationCheck: Handle = async ({ event, resolve }) => {
+  // Don't check authentication for auth routes
+  if (event.url.pathname.startsWith('/auth/')) {
+    return resolve(event);
+  }
+
   const session = event.cookies.get('session');
 
   if (!session) {
@@ -24,7 +30,17 @@ const authenticationCheck: Handle = async ({ event, resolve }) => {
         role: true
       }
     });
-    event.locals.user = user;
+
+    if (!user) {
+      event.cookies.delete('session');
+      event.locals.user = null;
+    } else {
+      // Ensure role is uppercase
+      event.locals.user = {
+        ...user,
+        role: user.role.toUpperCase()
+      };
+    }
   }
 
   return resolve(event);
@@ -32,6 +48,11 @@ const authenticationCheck: Handle = async ({ event, resolve }) => {
 
 const authorizationCheck: Handle = async ({ event, resolve }) => {
   const pathname = event.url.pathname;
+
+  // Don't check authorization for auth routes
+  if (pathname.startsWith('/auth/')) {
+    return resolve(event);
+  }
 
   // Check if the current path needs protection
   const protection = protectedPaths.find((p) => {
@@ -46,11 +67,13 @@ const authorizationCheck: Handle = async ({ event, resolve }) => {
       throw redirect(303, '/auth/signin');
     }
 
-    if (protection.role === 'admin' && event.locals.user.role !== 'admin') {
+    const userRole = event.locals.user.role.toUpperCase();
+
+    if (protection.role === 'ADMIN' && userRole !== 'ADMIN') {
       throw redirect(303, '/');
     }
 
-    if (protection.role === 'member' && !['member', 'admin'].includes(event.locals.user.role)) {
+    if (protection.role === 'MEMBER' && !['MEMBER', 'ADMIN'].includes(userRole)) {
       throw redirect(303, '/');
     }
   }

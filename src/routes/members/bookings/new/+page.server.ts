@@ -6,7 +6,7 @@ import { requireRole } from '$lib/server/auth-utils';
 
 export const load: PageServerLoad = async (event) => {
   // Ensure only members and admins can access this route
-  const user = await requireRole(event, ['member', 'admin']);
+  const user = await requireRole(event, ['MEMBER', 'ADMIN']);
 
   const scheduleId = event.url.searchParams.get('scheduleId');
   if (!scheduleId) {
@@ -38,7 +38,7 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
   default: async (event) => {
     try {
-      const user = await requireRole(event, ['member', 'admin']);
+      const user = await requireRole(event, ['MEMBER', 'ADMIN']);
       const formData = await event.request.formData();
       const scheduleId = formData.get('scheduleId') as string;
 
