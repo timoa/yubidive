@@ -28,8 +28,8 @@
     },
     { name: 'My Bookings', href: '/members/bookings', requireAuth: true, requireCustomer: true },
     { name: 'Boats', href: '/backend/boats', requireAuth: true, requireAdmin: true },
-    { name: 'Manage Schedules', href: '/backend/schedules', requireAuth: true, requireAdmin: true },
-    { name: 'Manage Bookings', href: '/backend/bookings', requireAuth: true, requireAdmin: true }
+    { name: 'Schedules', href: '/backend/schedules', requireAuth: true, requireAdmin: true },
+    { name: 'Bookings', href: '/backend/bookings', requireAuth: true, requireAdmin: true }
   ];
 
   async function handleSignOut() {
