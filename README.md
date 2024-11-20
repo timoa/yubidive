@@ -58,26 +58,26 @@ A modern, efficient scuba diving booking management system designed for dive clu
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/yourusername/yubidive.git
-    cd yubidive
-    ```
+   ```bash
+   git clone https://github.com/yourusername/yubidive.git
+   cd yubidive
+   ```
 
 2. Install dependencies:
 
-    ```bash
-    pnpm install
-    ```
+   ```bash
+   pnpm install
+   ```
 
 3. Set up the database:
 
-    ```bash
-    # Create SQLite database
-    pnpm prisma db push
+   ```bash
+   # Create SQLite database
+   pnpm prisma db push
 
-    # Seed the database with initial data
-    pnpm prisma db seed
-    ```
+   # Seed the database with initial data
+   pnpm prisma db seed
+   ```
 
 ## 🏃‍♂️ Development
 
