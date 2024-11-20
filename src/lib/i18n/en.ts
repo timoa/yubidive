@@ -239,16 +239,17 @@ export default {
       emailLabel: 'Email address',
       passwordLabel: 'Password',
       rememberMe: 'Remember me',
-      forgotPassword: 'Forgot your password?',
-      signInButton: 'Sign in',
+      forgotPasswordLink: 'Forgot your password?',
+      submitButton: 'Sign in',
       noAccount: "Don't have an account?",
-      createAccount: 'Create an account',
-      errors: {
-        invalidCredentials: 'Invalid email or password',
-        emailRequired: 'Email address is required',
-        invalidEmail: 'Invalid email format',
-        passwordRequired: 'Password is required'
-      }
+      signUpLink: 'Sign up',
+      welcomeBack: 'Welcome back!',
+      welcomeText:
+        'Sign in to access your diving logs, track your progress, and continue your underwater journey with YubiDive.',
+      genericError: 'An error occurred while signing in',
+      emailRequired: 'Email address is required',
+      invalidEmail: 'Invalid email format',
+      passwordRequired: 'Password is required'
     },
     signOut: {
       title: 'Sign out',

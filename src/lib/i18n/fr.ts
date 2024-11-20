@@ -242,17 +242,19 @@ export default {
       emailLabel: 'Adresse e-mail',
       passwordLabel: 'Mot de passe',
       rememberMe: 'Se souvenir de moi',
-      forgotPassword: 'Mot de passe oublié ?',
-      signInButton: 'Se connecter',
+      forgotPasswordLink: 'Mot de passe oublié ?',
+      submitButton: 'Se connecter',
       noAccount: 'Pas encore de compte ?',
-      createAccount: 'Créer un compte',
-      errors: {
-        invalidCredentials: 'E-mail ou mot de passe incorrect',
-        emailRequired: "L'adresse e-mail est requise",
-        invalidEmail: "Format d'adresse e-mail invalide",
-        passwordRequired: 'Le mot de passe est requis'
-      }
+      signUpLink: "S'inscrire",
+      welcomeBack: 'Bon retour !',
+      welcomeText:
+        'Connectez-vous pour accéder à vos journaux de plongée, suivre vos progrès et continuer votre voyage sous-marin avec YubiDive.',
+      genericError: 'Une erreur est survenue lors de la connexion',
+      emailRequired: "L'adresse e-mail est requise",
+      invalidEmail: "Format d'adresse e-mail invalide",
+      passwordRequired: 'Le mot de passe est requis'
     },
+    signUp: {},
     signOut: {
       title: 'Déconnexion',
       message: 'Vous avez été déconnecté avec succès',
