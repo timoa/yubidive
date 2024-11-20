@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import type { PageData } from './$types';
-  import { invalidateAll } from '$app/navigation';
+  import { invalidateAll, goto } from '$app/navigation';
   import ConfirmModal from '$lib/components/ConfirmModal.svelte';
   import EnhancedListItem from '$lib/components/EnhancedListItem.svelte';
   import { _ } from 'svelte-i18n';
@@ -39,6 +39,10 @@
 
   function isPastBooking(date: string | Date) {
     return new Date(date) <= new Date();
+  }
+
+  function handleEdit(bookingId: string) {
+    goto(`/backend/bookings/${bookingId}/edit`);
   }
 </script>
 
@@ -144,6 +148,11 @@
                   status="upcoming"
                   actions={[
                     {
+                      type: 'edit',
+                      onClick: () => handleEdit(booking.id),
+                      title: $_('common.edit')
+                    },
+                    {
                       type: 'cancel',
                       onClick: () => (cancelBooking = booking),
                       title: $_('bookings.cancelBooking')
@@ -171,6 +180,13 @@
                 startTime={booking.boatSchedule.startDateTime}
                 endTime={booking.boatSchedule.endDateTime}
                 status="past"
+                actions={[
+                  {
+                    type: 'edit',
+                    onClick: () => handleEdit(booking.id),
+                    title: $_('common.edit')
+                  }
+                ]}
               />
             </li>
           {/each}

@@ -7,6 +7,7 @@
   import EnhancedListItem from '$lib/components/EnhancedListItem.svelte';
   import { _ } from 'svelte-i18n';
   import { formatDate, formatTime } from '$lib/utils/dateFormat';
+  import { goto } from '$app/navigation';
 
   export let data: PageData;
 
@@ -20,7 +21,6 @@
   let selectedBoat = '';
   let selectedStartDateTime = '';
   let selectedEndDateTime = '';
-  let editingSchedule: any = null;
   let deleteSchedule: any = null;
 
   function isPastSchedule(date: string | Date) {
@@ -32,18 +32,6 @@
     selectedStartDateTime = '';
     selectedEndDateTime = '';
     showCreateModal = false;
-  }
-
-  function startEdit(schedule: any) {
-    editingSchedule = {
-      ...schedule,
-      startDateTime: format(new Date(schedule.startDateTime), 'yyyy-MM-ddTHH:mm'),
-      endDateTime: format(new Date(schedule.endDateTime), 'yyyy-MM-ddTHH:mm')
-    };
-  }
-
-  function cancelEdit() {
-    editingSchedule = null;
   }
 
   function handleDeleteConfirm() {
@@ -169,7 +157,7 @@
                   actions={[
                     {
                       type: 'edit',
-                      onClick: () => startEdit(schedule),
+                      onClick: () => goto(`/backend/schedules/${schedule.id}/edit`),
                       title: $_('common.edit')
                     },
                     {

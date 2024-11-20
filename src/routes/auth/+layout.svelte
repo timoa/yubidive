@@ -4,7 +4,7 @@
   const currentYear = new Date().getFullYear();
 </script>
 
-<div class="fixed inset-0 min-h-screen">
+<div class="auth-layout fixed inset-0 min-h-screen">
   <div
     class="absolute inset-0 bg-cover bg-center bg-no-repeat"
     style="background-image: url('https://images.unsplash.com/photo-1682687982501-1e58ab814714');"
@@ -38,7 +38,7 @@
 
     <!-- Footer -->
     <div class="flex-none p-6 text-center">
-      <p class="text-sm text-white/60">
+      <p class="text-xs text-white/60">
         {currentYear} YubiDive. All rights reserved.
       </p>
     </div>
@@ -46,7 +46,7 @@
 </div>
 
 <style>
-  :global(html, body) {
+  .auth-layout {
     height: 100%;
     overflow: hidden;
   }

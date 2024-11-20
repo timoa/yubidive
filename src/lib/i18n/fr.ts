@@ -108,8 +108,8 @@ export default {
     bookingsCount: 'Nombre de réservations'
   },
   schedules: {
-    title: 'Horaires',
-    boatSchedules: 'Horaires des sorties',
+    title: 'Sorties',
+    boatSchedules: 'Sorties',
     addSchedule: 'Ajouter une sortie',
     editSchedule: 'Modifier la sortie',
     deleteSchedule: 'Supprimer la sortie',
@@ -121,7 +121,7 @@ export default {
     actions: 'Actions',
     save: 'Enregistrer',
     cancel: 'Annuler',
-    deleteConfirmation: 'Êtes-vous sûr de vouloir supprimer la sortie du bateau {boat} le {date} ?',
+    deleteConfirmation: 'Êtes-vous sûr de vouloir supprimer la sortie du {date} ?',
     createNewSchedule: 'Créer une nouvelle sortie',
     selectBoat: 'Sélectionner un bateau',
     selectABoat: 'Sélectionnez un bateau',
@@ -134,8 +134,8 @@ export default {
     time: 'Horaire',
     availableSpots: 'Places disponibles',
     bookingFor: 'Réservation pour',
-    noSchedules: 'Aucune sortie disponible',
-    addFirstSchedule: 'Ajoutez votre première sortie',
+    noSchedules: 'Aucun créneau horaire disponible',
+    addFirstSchedule: 'Ajoutez votre premier créneau',
     schedule: {
       date: 'Date',
       time: 'Heure',
@@ -143,15 +143,23 @@ export default {
       availableSpots: 'Places disponibles',
       details: 'Détails de la sortie'
     },
-    noSchedulesYet: 'Pas encore de sorties',
-    schedulesWillAppear: 'Les sorties apparaîtront ici une fois créées',
-    noActiveSchedules: 'Pas de sorties actives',
+    noSchedulesYet: 'Aucune sortie pour le moment',
+    schedulesWillAppear: 'Les sorties apparaîtront ici une fois créés',
+    noActiveSchedules: 'Aucune sortie à venir',
     createNewToSee: 'Créez une nouvelle sortie pour la voir ici',
-    noPastSchedules: 'Pas de sorties passées',
-    pastSchedulesWillAppear: 'Les sorties passées apparaîtront ici'
+    noPastSchedules: 'Aucune sortie passée',
+    pastSchedulesWillAppear: 'Les sorties passées apparaîtront ici',
+    allFieldsRequired: 'Tous les champs sont obligatoires',
+    endTimeMustBeAfterStart: "L'heure de fin doit être après l'heure de début",
+    startTimeMustBeFuture: 'La date de début doit être dans le futur',
+    editScheduleDescription:
+      'Modifiez le créneau horaire en sélectionnant un nouveau bateau et/ou de nouveaux horaires.',
+    currentSchedule: 'Créneau horaire actuel',
+    hasBookings:
+      '{count, plural, =0 {Aucune réservation} one {# réservation associée} other {# réservations associées}}'
   },
   bookings: {
-    title: 'Réservations',
+    title: 'Mes réservations',
     myBookings: 'Mes Réservations',
     upcomingBookings: 'Réservations à venir',
     pastBookings: 'Réservations passées',
@@ -160,19 +168,16 @@ export default {
     noPastBookings: 'Aucune réservation passée',
     pastBookingsWillAppear: 'Les réservations passées apparaîtront ici',
     noBookingsYet: 'Aucune réservation pour le moment',
-    bookingsWillAppear:
-      'Les réservations apparaîtront ici une fois que les membres commenceront à réserver',
+    bookingsWillAppear: 'Vos réservations apparaîtront ici une fois que vous en aurez créé.',
     startBooking: 'Commencez par réserver une plongée parmi nos sorties disponibles',
     bookedBy: 'Réservé par',
     cancelBooking: 'Annuler la réservation',
-    cancelConfirmation:
-      'Êtes-vous sûr de vouloir annuler la réservation pour la sortie sur le bateau {boat} le {date} ? Cette action ne peut pas être annulée.',
-    upcoming: 'À venir',
-    past: 'Passée',
-    status: {
-      upcoming: 'À venir',
-      past: 'Passée'
-    },
+    cancelConfirmation: 'Êtes-vous sûr de vouloir annuler cette réservation ?',
+    editBooking: 'Modifier la réservation',
+    editBookingDescription: 'Modifiez votre réservation en choisissant un nouveau créneau horaire.',
+    currentBooking: 'Réservation actuelle',
+    selectNewTime: 'Sélectionnez un nouveau créneau horaire',
+    bookingCanceled: 'Réservation annulée avec succès',
     alreadyBooked: 'Vous avez déjà une réservation pour cette sortie',
     noSpotsAvailable: 'Plus de places disponibles pour cette sortie',
     bookingFailed: 'Échec de la création de la réservation. Veuillez réessayer plus tard.',
