@@ -66,7 +66,7 @@
 
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold">{$_('boats.manageBoats')}</h1>
+    <h1 class="text-3xl font-bold">{$_('boats.title')}</h1>
     <button
       class="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors inline-flex items-center space-x-2"
       on:click={() => {

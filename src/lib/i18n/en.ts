@@ -5,7 +5,6 @@ export default {
     signUp: 'Sign Up',
     diver: 'diver',
     divers: 'divers',
-    allBookings: 'All Bookings',
     bookNewDive: 'Book a Dive',
     viewBoats: 'View Boats',
     bookNow: 'Book Now',
@@ -147,6 +146,8 @@ export default {
     pastSchedulesWillAppear: 'Past schedules will appear here'
   },
   bookings: {
+    title: 'Bookings',
+    myBookings: 'My Bookings',
     upcomingBookings: 'Upcoming Bookings',
     pastBookings: 'Past Bookings',
     noUpcomingBookings: 'No upcoming bookings',

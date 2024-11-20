@@ -51,7 +51,7 @@
 
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold">{$_('users.manageUsers')}</h1>
+    <h1 class="text-3xl font-bold">{$_('users.title')}</h1>
     <button
       on:click={() => (showCreateModal = true)}
       class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center"

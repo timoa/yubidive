@@ -151,6 +151,8 @@ export default {
     pastSchedulesWillAppear: 'Les sorties passées apparaîtront ici'
   },
   bookings: {
+    title: 'Réservations',
+    myBookings: 'Mes Réservations',
     upcomingBookings: 'Réservations à venir',
     pastBookings: 'Réservations passées',
     noUpcomingBookings: 'Aucune réservation à venir',
