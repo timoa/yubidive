@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { fade } from 'svelte/transition';
   import { _ } from 'svelte-i18n';
+  import { signIn } from '$lib/auth';
 
   let email = '';
   let password = '';
@@ -39,23 +39,15 @@
     error = '';
 
     try {
-      const response = await fetch('/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
+      const result = await signIn(email, password);
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (result.success) {
         goto($page.url.searchParams.get('redirectTo') || '/');
       } else {
-        error = data.message || $_('auth.signIn.genericError');
+        error = result.error?.message || $_('auth.signIn.genericError');
       }
     } catch (e) {
-      error = $_('auth.signi-In.genericError');
+      error = $_('auth.signIn.genericError');
     } finally {
       loading = false;
     }

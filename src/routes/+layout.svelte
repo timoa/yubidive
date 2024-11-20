@@ -7,6 +7,7 @@
   import { _ } from 'svelte-i18n';
   import '../lib/i18n/i18n';
   import LanguageSelector from '$lib/components/LanguageSelector.svelte';
+  import Logo from '$lib/components/Logo.svelte';
 
   let isMenuOpen = false;
   let isProfileMenuOpen = false;
@@ -116,7 +117,9 @@
       <div class="flex justify-between h-16">
         <div class="flex">
           <div class="flex-shrink-0 flex items-center">
-            <a href="/" class="text-2xl font-bold text-primary-600">YubiDive</a>
+            <a href="/" class="hover:opacity-80 transition-opacity">
+              <Logo />
+            </a>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             {#each navigation as item}
