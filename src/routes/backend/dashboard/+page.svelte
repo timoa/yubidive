@@ -8,9 +8,13 @@
 
   let bookingsChartCanvas: HTMLCanvasElement;
   let bookingsByWeekChartCanvas: HTMLCanvasElement;
+  let usersByRoleChartCanvas: HTMLCanvasElement;
+  let bookingsByBoatChartCanvas: HTMLCanvasElement;
 
   let bookingsChart: Chart;
   let bookingsByWeekChart: Chart;
+  let usersByRoleChart: Chart;
+  let bookingsByBoatChart: Chart;
 
   const monthKeys = [
     'january',
@@ -97,6 +101,61 @@
           }
         }
       });
+
+      // Users by Role donut chart
+      usersByRoleChart = new Chart(usersByRoleChartCanvas, {
+        type: 'doughnut',
+        data: {
+          labels: data.stats.usersByRole.labels.map((role) => $_(`common.roles.${role}`)),
+          datasets: [
+            {
+              data: data.stats.usersByRole.data,
+              backgroundColor: [
+                '#10b981', // green for members
+                '#3b82f6' // blue for admins
+              ]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+
+      // Bookings by Boat donut chart
+      bookingsByBoatChart = new Chart(bookingsByBoatChartCanvas, {
+        type: 'doughnut',
+        data: {
+          labels: data.stats.bookingsByBoat.labels,
+          datasets: [
+            {
+              data: data.stats.bookingsByBoat.data,
+              backgroundColor: [
+                '#3b82f6', // blue
+                '#10b981', // green
+                '#f59e0b', // yellow
+                '#ef4444', // red
+                '#8b5cf6' // purple
+              ]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
     } catch (error) {
       console.error('Error initializing charts:', error);
     }
@@ -105,6 +164,8 @@
   onDestroy(() => {
     bookingsChart?.destroy();
     bookingsByWeekChart?.destroy();
+    usersByRoleChart?.destroy();
+    bookingsByBoatChart?.destroy();
   });
 </script>
 
@@ -127,6 +188,24 @@
       <h3 class="text-gray-500 text-sm font-medium">{$_('dashboard.upcomingBookings')}</h3>
       <p class="text-2xl font-bold">{data.stats.upcomingBookings}</p>
     </div>
+    <div class="bg-white p-4 rounded-lg shadow">
+      <h3 class="text-gray-500 text-sm font-medium">{$_('dashboard.totalUsers')}</h3>
+      <p class="text-2xl font-bold">{data.stats.totalUsers}</p>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow">
+      <h3 class="text-gray-500 text-sm font-medium">{$_('dashboard.activeUsers')}</h3>
+      <p class="text-2xl font-bold">{data.stats.activeUsers}</p>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow">
+      <h3 class="text-gray-500 text-sm font-medium">{$_('dashboard.newUsersLastMonth')}</h3>
+      <p class="text-2xl font-bold">{data.stats.newUsersLastMonth}</p>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow">
+      <h3 class="text-gray-500 text-sm font-medium">{$_('dashboard.bookingsPerUser')}</h3>
+      <p class="text-2xl font-bold">
+        {Math.round((data.stats.totalBookings / data.stats.totalUsers) * 100) / 100}
+      </p>
+    </div>
   </div>
 
   <!-- Charts Grid -->
@@ -144,6 +223,22 @@
       <h3 class="text-gray-700 font-medium mb-4">{$_('dashboard.bookingsByWeek')}</h3>
       <div class="h-64">
         <canvas bind:this={bookingsByWeekChartCanvas} />
+      </div>
+    </div>
+
+    <!-- Users by Role -->
+    <div class="bg-white p-4 rounded-lg shadow">
+      <h3 class="text-gray-700 font-medium mb-4">{$_('dashboard.usersByRole')}</h3>
+      <div class="h-64">
+        <canvas bind:this={usersByRoleChartCanvas} />
+      </div>
+    </div>
+
+    <!-- Bookings by Boat -->
+    <div class="bg-white p-4 rounded-lg shadow">
+      <h3 class="text-gray-700 font-medium mb-4">{$_('dashboard.bookingsByBoat')}</h3>
+      <div class="h-64">
+        <canvas bind:this={bookingsByBoatChartCanvas} />
       </div>
     </div>
   </div>

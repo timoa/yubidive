@@ -7,23 +7,26 @@ export const load: PageServerLoad = async () => {
   const now = new Date();
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(now.getMonth() - 6);
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(now.getMonth() - 1);
 
-  const [boats, bookings, schedules, bookingsByMonth, bookingsByWeek] = await Promise.all([
+  const [boats, bookings, schedules, bookingsByMonth, bookingsByWeek, users] = await Promise.all([
     // Get all boats
     prisma.boat.findMany({
+      where: {
+        schedules: {
+          some: {}
+        }
+      },
       select: {
         id: true,
         name: true,
         status: true,
         schedules: {
           select: {
-            id: true
+            id: true,
+            bookings: true
           }
-        }
-      },
-      where: {
-        schedules: {
-          some: {}
         }
       }
     }),
@@ -77,7 +80,14 @@ export const load: PageServerLoad = async () => {
       WHERE "createdAt" >= ${sixMonthsAgo.toISOString()}
       GROUP BY strftime('%W', "createdAt")
       ORDER BY week
-    `
+    `,
+
+    // Get user statistics
+    prisma.user.findMany({
+      include: {
+        bookings: true
+      }
+    })
   ]);
 
   const monthNames = [
@@ -96,16 +106,15 @@ export const load: PageServerLoad = async () => {
   ];
 
   const processedBookingsByMonth = new Array(12).fill(0);
-
   // @ts-ignore - Raw query type
   bookingsByMonth.forEach((row) => {
-    processedBookingsByMonth[parseInt(row.month) - 1] = Number(row.count);
+    processedBookingsByMonth[parseInt(row.month) - 1] = parseInt(row.count);
   });
 
-  const bookingsByWeekData = new Array(53).fill(0); // 53 weeks in a year
+  const processedBookingsByWeek = new Array(53).fill(0);
   // @ts-ignore - Raw query type
   bookingsByWeek.forEach((row) => {
-    bookingsByWeekData[parseInt(row.week)] = Number(row.count);
+    processedBookingsByWeek[parseInt(row.week)] = parseInt(row.count);
   });
 
   return {
@@ -113,21 +122,38 @@ export const load: PageServerLoad = async () => {
       totalBoats: boats.length,
       activeBoats: boats.filter((boat) => boat.status === 'ACTIVE').length,
       totalBookings: bookings.length,
-      upcomingBookings: schedules.reduce((acc, schedule) => acc + schedule.bookings.length, 0),
+      upcomingBookings: bookings.filter(
+        (booking) => new Date(booking.boatSchedule.startDateTime) > now
+      ).length,
+      totalUsers: users.length,
+      newUsersLastMonth: users.filter((user) => new Date(user.createdAt) > oneMonthAgo).length,
+      activeUsers: users.filter((user) => user.bookings.length > 0).length,
       bookingsOverTime: {
-        labels: processedBookingsByMonth.map((_, index) => index),
+        labels: monthNames,
         data: processedBookingsByMonth
       },
       bookingsByWeek: {
-        labels: bookingsByWeekData.map((_, index) => `Week ${index + 1}`),
-        data: bookingsByWeekData
+        labels: processedBookingsByWeek.map((_, i) => `Week ${i + 1}`),
+        data: processedBookingsByWeek
       },
       upcomingSchedules: schedules.map((schedule) => ({
-        id: schedule.id,
         title: schedule.boat.name,
-        datetime: schedule.startDateTime.toLocaleString(),
+        datetime: schedule.startDateTime,
         bookingCount: schedule.bookings.length
-      }))
+      })),
+      usersByRole: {
+        labels: ['member', 'admin'],
+        data: [
+          users.filter((user) => user.role === 'member').length,
+          users.filter((user) => user.role === 'admin').length
+        ]
+      },
+      bookingsByBoat: {
+        labels: boats.map((boat) => boat.name),
+        data: boats.map((boat) =>
+          boat.schedules.reduce((total, schedule) => total + schedule.bookings.length, 0)
+        )
+      }
     }
   };
 };

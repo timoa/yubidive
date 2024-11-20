@@ -32,7 +32,7 @@ const authenticationCheck: Handle = async ({ event, resolve }) => {
     });
 
     if (!user) {
-      event.cookies.delete('session');
+      event.cookies.delete('session', { path: '/' });
       event.locals.user = null;
     } else {
       // Ensure role is uppercase

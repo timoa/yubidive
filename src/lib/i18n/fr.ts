@@ -55,6 +55,10 @@ export default {
       active: 'Actif',
       inactive: 'Indisponible',
       maintenance: 'En maintenance'
+    },
+    roles: {
+      member: 'Membre',
+      admin: 'Administrateur'
     }
   },
   navbar: {
@@ -106,6 +110,19 @@ export default {
     no: 'Non',
     bookings: 'réservations',
     bookingsCount: 'Nombre de réservations'
+  },
+  boat: {
+    capacity: 'Capacité',
+    description: 'Description',
+    upcomingSchedules: 'Prochaines sorties',
+    noUpcomingSchedules: 'Aucune sortie à venir',
+    bookNow: 'Réserver',
+    spots: 'places',
+    spotsLeft: '{count} places restantes',
+    spotsFull: 'Complet',
+    specifications: 'Spécifications',
+    scheduleList: 'Liste des sorties',
+    viewAll: 'Voir toutes les sorties'
   },
   schedules: {
     title: 'Sorties',
@@ -286,49 +303,36 @@ export default {
   dashboard: {
     title: 'Tableau de bord',
     welcome: 'Bienvenue, {name}',
+    boats: 'Bateaux',
+    bookings: 'Réservations',
+    users: 'Utilisateurs',
+    newUsers: 'Nouveaux utilisateurs',
+    total: 'Total',
+    active: 'Actifs',
+    upcoming: 'À venir',
+    lastMonth: 'Dernier mois',
+    growth: 'Croissance',
+    statistics: 'Statistiques',
+    bookingsOverTime: 'Réservations dans le temps',
+    bookingsByWeek: 'Réservations par semaine',
+    usersByRole: 'Utilisateurs par rôle',
+    bookingsByBoat: 'Réservations par bateau',
     upcomingBookings: 'Réservations à venir',
-    availableDives: 'Plongées disponibles',
+    availableDives: 'Sorties disponibles',
     noUpcomingBookings: 'Aucune réservation à venir',
-    noAvailableDives: 'Aucune plongée disponible pour le moment',
+    noAvailableDives: 'Aucune sortie disponible pour le moment',
     viewAllBookings: 'Voir toutes les réservations',
     viewAllSchedules: 'Voir tous les horaires',
     bookNow: 'Réserver',
     spots: 'places',
-    statistics: 'Statistiques',
-    totalBookings: 'Total des réservations',
-    totalRevenue: 'Revenu total',
-    activeUsers: 'Utilisateurs actifs',
-    lastBookings: 'Dernières réservations',
-    overview: "Vue d'ensemble",
-    cards: {
-      totalBoats: 'Total des bateaux',
-      activeBoats: 'Bateaux actifs',
-      totalBookings: 'Total des réservations',
-      upcomingBookings: 'Réservations à venir',
-      revenue: 'Revenus',
-      nextSchedules: 'Prochaines sorties',
-      popularBoats: 'Bateaux populaires',
-      bookingTrends: 'Tendances des réservations'
-    },
-    noSchedules: 'Aucune sortie à venir',
-    viewAll: 'Voir tout',
-    today: "Aujourd'hui",
-    thisWeek: 'Cette semaine',
-    thisMonth: 'Ce mois',
-    lastMonth: 'Le mois dernier',
-    charts: {
-      bookingsOverTime: 'Réservations dans le temps',
-      popularBoats: 'Bateaux les plus populaires',
-      bookingsByWeek: 'Réservations par semaine'
-    },
-    totalBoats: 'Total des bateaux',
-    activeBoats: 'Bateaux actifs',
-    bookingsOverTime: 'Réservations dans le temps',
-    bookingsByWeek: 'Réservations par semaine',
-    upcomingSchedules: 'Sorties à venir',
+    upcomingSchedules: 'Prochaines sorties',
     boat: 'Bateau',
-    dateTime: 'Date & Heure',
-    bookings: 'Réservations'
+    dateTime: 'Date et heure',
+    totalUsers: 'Total des utilisateurs',
+    newUsersLastMonth: 'Nouveaux utilisateurs (30j)',
+    activeUsers: 'Utilisateurs actifs',
+    bookingsPerUser: 'Réservations par utilisateur',
+    noUpcomingSchedules: 'Aucune sortie à venir'
   },
   users: {
     title: 'Utilisateurs',
@@ -341,8 +345,8 @@ export default {
     password: 'Mot de passe',
     activeBookings: 'Réservations actives',
     roles: {
-      admin: 'Administrateur',
-      member: 'Membre'
+      member: 'Membre',
+      admin: 'Administrateur'
     },
     actions: {
       save: 'Enregistrer les modifications',

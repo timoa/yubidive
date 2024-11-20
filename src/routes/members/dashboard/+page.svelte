@@ -35,7 +35,12 @@
                     <div class="flex items-center space-x-4">
                       <div class="flex-1 min-w-0">
                         <p class="text-sm font-medium text-gray-900 truncate">
-                          {booking.boatSchedule.boat.name}
+                          <a
+                            href="/members/boats/{booking.boatSchedule.boat.id}"
+                            class="hover:text-primary-600"
+                          >
+                            {booking.boatSchedule.boat.name}
+                          </a>
                         </p>
                         <p class="text-sm text-gray-500">
                           {formatDate(booking.boatSchedule.startDateTime)}
@@ -83,7 +88,12 @@
                     <div class="flex items-center space-x-4">
                       <div class="flex-1 min-w-0">
                         <p class="text-sm font-medium text-gray-900 truncate">
-                          {schedule.boat.name}
+                          <a
+                            href="/members/boats/{schedule.boat.id}"
+                            class="hover:text-primary-600"
+                          >
+                            {schedule.boat.name}
+                          </a>
                         </p>
                         <p class="text-sm text-gray-500">
                           {formatDate(schedule.startDateTime)}
