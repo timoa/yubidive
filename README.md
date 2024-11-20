@@ -20,7 +20,6 @@ A modern, efficient scuba diving booking management system designed for dive clu
 
 - Create and manage dive schedules
 - Set start and end times for dive sessions
-- Track available spots for each scheduled dive
 - View upcoming and past schedules
 
 ### 🎫 Booking System
@@ -117,10 +116,13 @@ This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENS
 ## 🔜 Roadmap
 
 - [ ] Integration with Cloudflare R2 database
-- [ ] Advanced booking management features
-- [ ] Mobile app version
+- [ ] WhatsApp and Telegram bot to book dives
+- [ ] Notifications
 - [ ] Email notifications
 - [ ] Calendar integration
+- [ ] Advanced booking management features
+- [ ] Track available diving spots
+- [ ] Mobile app version (maybe)
 
 ## 🤝 Contributing
 
