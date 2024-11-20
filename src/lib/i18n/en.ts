@@ -3,16 +3,8 @@ export default {
     signIn: 'Sign In',
     signOut: 'Sign Out',
     signUp: 'Sign Up',
-    home: 'Home',
-    boats: 'Boats',
-    schedules: 'Schedules',
-    bookings: 'Bookings',
-    myBookings: 'My Bookings',
-    upcomingBookings: 'Upcoming Bookings',
-    pastBookings: 'Past Bookings',
-    language: 'Language',
-    english: 'English',
-    french: 'Français',
+    diver: 'diver',
+    divers: 'divers',
     allBookings: 'All Bookings',
     bookNewDive: 'Book a Dive',
     viewBoats: 'View Boats',
@@ -26,6 +18,11 @@ export default {
     openMainMenu: 'Open main menu',
     welcome: 'Welcome, {name}',
     profile: 'Your Profile',
+    language: 'Language',
+    languages: {
+      english: 'English',
+      french: 'Français'
+    },
     months: {
       january: 'January',
       february: 'February',
@@ -48,7 +45,27 @@ export default {
       thursday: 'Thu',
       friday: 'Fri',
       saturday: 'Sat'
+    },
+    status: {
+      confirmed: 'Confirmed',
+      pending: 'Pending',
+      canceled: 'Canceled',
+      completed: 'Completed',
+      past: 'Past',
+      upcoming: 'Upcoming',
+      active: 'Active',
+      inactive: 'Inactive',
+      maintenance: 'Maintenance'
     }
+  },
+  navbar: {
+    home: 'Home',
+    dashboard: 'Dashboard',
+    boats: 'Boats',
+    schedules: 'Schedules',
+    bookings: 'Bookings',
+    users: 'Users',
+    myBookings: 'My Bookings'
   },
   boats: {
     title: 'Boats',
@@ -96,6 +113,10 @@ export default {
   },
   schedules: {
     title: 'Schedules',
+    boatSchedules: 'Boat Schedules',
+    createNewSchedule: 'Create New Schedule',
+    selectBoat: 'Select Boat',
+    selectABoat: 'Select a boat',
     date: 'Date',
     time: 'Time',
     startTime: 'Start Time',
@@ -103,13 +124,12 @@ export default {
     availableSpots: 'Available Spots',
     bookingFor: 'Booking For',
     upcomingSchedules: 'Upcoming Schedules',
+    pastSchedules: 'Past Schedules',
     createSchedule: 'Create Schedule',
     editSchedule: 'Edit Schedule',
     deleteSchedule: 'Delete Schedule',
     noSchedules: 'No schedules available',
     addFirstSchedule: 'Add your first schedule',
-    boatSchedules: 'Boat Schedules',
-    addSchedule: 'Add Schedule',
     boat: 'Boat',
     dateTime: 'Date & Time',
     startDateTime: 'Start Date & Time',
@@ -118,9 +138,17 @@ export default {
     actions: 'Actions',
     save: 'Save',
     cancel: 'Cancel',
-    deleteConfirmation: 'Are you sure you want to delete the schedule for {boat} on {date}?'
+    deleteConfirmation: 'Are you sure you want to delete the schedule for {boat} on {date}?',
+    noSchedulesYet: 'No schedules yet',
+    schedulesWillAppear: 'Schedules will appear here once created',
+    noActiveSchedules: 'No active schedules',
+    createNewToSee: 'Create a new schedule to see it here',
+    noPastSchedules: 'No past schedules',
+    pastSchedulesWillAppear: 'Past schedules will appear here'
   },
   bookings: {
+    upcomingBookings: 'Upcoming Bookings',
+    pastBookings: 'Past Bookings',
     noUpcomingBookings: 'No upcoming bookings',
     upcomingBookingsWillAppear: 'Upcoming bookings will appear here',
     noPastBookings: 'No past bookings',
@@ -267,7 +295,7 @@ export default {
     upcomingSchedules: 'Upcoming Schedules',
     totalBoats: 'Total Boats',
     activeBoats: 'Active Boats',
-    bookingsByDay: 'Bookings by Day',
+    bookingsByWeek: 'Bookings by Week',
     cards: {}
   },
   users: {

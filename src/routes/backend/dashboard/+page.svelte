@@ -7,10 +7,10 @@
   export let data: PageData;
 
   let bookingsChartCanvas: HTMLCanvasElement;
-  let bookingsByDayChartCanvas: HTMLCanvasElement;
+  let bookingsByWeekChartCanvas: HTMLCanvasElement;
 
   let bookingsChart: Chart;
-  let bookingsByDayChart: Chart;
+  let bookingsByWeekChart: Chart;
 
   const monthKeys = [
     'january',
@@ -70,17 +70,15 @@
         }
       });
 
-      // Bookings by day chart
-      bookingsByDayChart = new Chart(bookingsByDayChartCanvas, {
+      // Bookings by week chart
+      bookingsByWeekChart = new Chart(bookingsByWeekChartCanvas, {
         type: 'bar',
         data: {
-          labels: data.stats.bookingsByDay.labels.map((i) =>
-            $_(`common.weekDays.${weekDayKeys[i]}`)
-          ),
+          labels: data.stats.bookingsByWeek.labels,
           datasets: [
             {
               label: $_('dashboard.bookings'),
-              data: data.stats.bookingsByDay.data,
+              data: data.stats.bookingsByWeek.data,
               backgroundColor: '#3b82f6'
             }
           ]
@@ -106,7 +104,7 @@
 
   onDestroy(() => {
     bookingsChart?.destroy();
-    bookingsByDayChart?.destroy();
+    bookingsByWeekChart?.destroy();
   });
 </script>
 
@@ -141,11 +139,11 @@
       </div>
     </div>
 
-    <!-- Bookings by Day -->
+    <!-- Bookings by Week -->
     <div class="bg-white p-4 rounded-lg shadow">
-      <h3 class="text-gray-700 font-medium mb-4">{$_('dashboard.bookingsByDay')}</h3>
+      <h3 class="text-gray-700 font-medium mb-4">{$_('dashboard.bookingsByWeek')}</h3>
       <div class="h-64">
-        <canvas bind:this={bookingsByDayChartCanvas} />
+        <canvas bind:this={bookingsByWeekChartCanvas} />
       </div>
     </div>
   </div>

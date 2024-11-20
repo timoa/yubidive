@@ -31,46 +31,56 @@
 
   $: navigation = [
     {
-      name: $_('dashboard.title'),
+      name: $_('navbar.dashboard'),
       href: '/backend/dashboard',
       requireAuth: true,
       requireAdmin: true
     },
     {
-      name: $_('dashboard.title'),
+      name: $_('navbar.dashboard'),
       href: '/members/dashboard',
       requireAuth: true,
       requireMember: true,
       hideWhenAdmin: true
     },
     {
-      name: $_('common.boats'),
+      name: $_('navbar.boats'),
       href: '/members/boats',
       requireAuth: true,
       requireMember: true,
       hideWhenAdmin: true
     },
     {
-      name: $_('common.myBookings'),
+      name: $_('navbar.myBookings'),
       href: '/members/bookings',
       requireAuth: true,
       requireMember: true,
       hideWhenAdmin: true
     },
-    { name: $_('common.boats'), href: '/backend/boats', requireAuth: true, requireAdmin: true },
     {
-      name: $_('common.schedules'),
+      name: $_('navbar.boats'),
+      href: '/backend/boats',
+      requireAuth: true,
+      requireAdmin: true
+    },
+    {
+      name: $_('navbar.schedules'),
       href: '/backend/schedules',
       requireAuth: true,
       requireAdmin: true
     },
     {
-      name: $_('common.bookings'),
+      name: $_('navbar.bookings'),
       href: '/backend/bookings',
       requireAuth: true,
       requireAdmin: true
     },
-    { name: $_('users.title'), href: '/backend/users', requireAuth: true, requireAdmin: true }
+    {
+      name: $_('navbar.users'),
+      href: '/backend/users',
+      requireAuth: true,
+      requireAdmin: true
+    }
   ];
 
   async function handleSignOut() {

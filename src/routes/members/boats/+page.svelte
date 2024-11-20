@@ -58,7 +58,7 @@
                   />
                 </svg>
                 {boat.capacity}
-                {$_('boats.divers')}
+                {$_('common.divers')}
               </p>
             </div>
           </div>

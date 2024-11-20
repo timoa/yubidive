@@ -3,18 +3,12 @@ export default {
     signIn: 'Se connecter',
     signOut: 'Se déconnecter',
     signUp: "S'inscrire",
-    home: 'Accueil',
-    boats: 'Bateaux',
-    schedules: 'Sorties',
-    bookings: 'Réservations',
-    myBookings: 'Mes Réservations',
-    upcomingBookings: 'Réservations à venir',
-    pastBookings: 'Réservations passées',
-    language: 'Langue',
-    english: 'English',
-    french: 'Français',
+    schedule: 'sortie',
+    schedules: 'sorties',
+    diver: 'plongeur',
+    divers: 'plongeurs',
     allBookings: 'Toutes les réservations',
-    bookNewDive: 'Réserver une plongée',
+    bookNewDive: 'Réserver une sortie',
     viewBoats: 'Voir les bateaux',
     bookNow: 'Réserver',
     confirmBooking: 'Confirmer la réservation',
@@ -23,6 +17,11 @@ export default {
     of: 'sur',
     welcome: 'Bienvenue, {name}',
     profile: 'Votre Profil',
+    language: 'Langue',
+    languages: {
+      english: 'English',
+      french: 'Français'
+    },
     months: {
       january: 'Janvier',
       february: 'Février',
@@ -45,7 +44,27 @@ export default {
       thursday: 'Jeu',
       friday: 'Ven',
       saturday: 'Sam'
+    },
+    status: {
+      confirmed: 'Confirmer',
+      pending: 'En attente',
+      canceled: 'Annuler',
+      completed: 'Terminé',
+      past: 'Passée',
+      upcoming: 'A venir',
+      active: 'Actif',
+      inactive: 'Indisponible',
+      maintenance: 'En maintenance'
     }
+  },
+  navbar: {
+    home: 'Accueil',
+    dashboard: 'Tableau de bord',
+    boats: 'Bateaux',
+    schedules: 'Sorties',
+    bookings: 'Réservations',
+    users: 'Utilisateurs',
+    myBookings: 'Mes Réservations'
   },
   boats: {
     manageBoats: 'Gérer les bateaux',
@@ -53,17 +72,11 @@ export default {
     editBoat: 'Modifier le bateau',
     deleteBoat: 'Supprimer le bateau',
     noDescription: 'Aucune description disponible',
-    divers: 'plongeurs',
-    schedule: 'sortie',
-    schedules: 'sorties',
     boatDetails: 'Détails du bateau',
     boatName: 'Nom du bateau',
     capacity: 'Capacité',
     description: 'Description',
     status: 'Statut',
-    active: 'Actif',
-    inactive: 'Indisponible',
-    maintenance: 'En maintenance',
     save: 'Enregistrer',
     cancel: 'Annuler',
     confirmDelete: 'Confirmer la suppression',
@@ -95,7 +108,7 @@ export default {
     bookingsCount: 'Nombre de réservations'
   },
   schedules: {
-    title: 'Sorties',
+    title: 'Horaires',
     boatSchedules: 'Horaires des sorties',
     addSchedule: 'Ajouter une sortie',
     editSchedule: 'Modifier la sortie',
@@ -111,11 +124,12 @@ export default {
     deleteConfirmation: 'Êtes-vous sûr de vouloir supprimer la sortie du bateau {boat} le {date} ?',
     createNewSchedule: 'Créer une nouvelle sortie',
     selectBoat: 'Sélectionner un bateau',
-    selectABoat: 'Sélectionner un bateau...',
+    selectABoat: 'Sélectionnez un bateau',
     date: 'Date',
     startTime: 'Heure de début',
     endTime: 'Heure de fin',
     upcomingSchedules: 'Sorties à venir',
+    pastSchedules: 'Sorties passées',
     createSchedule: 'Créer la sortie',
     time: 'Horaire',
     availableSpots: 'Places disponibles',
@@ -128,9 +142,17 @@ export default {
       boat: 'Bateau',
       availableSpots: 'Places disponibles',
       details: 'Détails de la sortie'
-    }
+    },
+    noSchedulesYet: 'Pas encore de sorties',
+    schedulesWillAppear: 'Les sorties apparaîtront ici une fois créées',
+    noActiveSchedules: 'Pas de sorties actives',
+    createNewToSee: 'Créez une nouvelle sortie pour la voir ici',
+    noPastSchedules: 'Pas de sorties passées',
+    pastSchedulesWillAppear: 'Les sorties passées apparaîtront ici'
   },
   bookings: {
+    upcomingBookings: 'Réservations à venir',
+    pastBookings: 'Réservations passées',
     noUpcomingBookings: 'Aucune réservation à venir',
     upcomingBookingsWillAppear: 'Les réservations à venir apparaîtront ici',
     noPastBookings: 'Aucune réservation passée',
@@ -288,12 +310,12 @@ export default {
     charts: {
       bookingsOverTime: 'Réservations dans le temps',
       popularBoats: 'Bateaux les plus populaires',
-      bookingsByDay: 'Réservations par jour'
+      bookingsByWeek: 'Réservations par semaine'
     },
     totalBoats: 'Total des bateaux',
     activeBoats: 'Bateaux actifs',
     bookingsOverTime: 'Réservations dans le temps',
-    bookingsByDay: 'Réservations par jour',
+    bookingsByWeek: 'Réservations par semaine',
     upcomingSchedules: 'Sorties à venir',
     boat: 'Bateau',
     dateTime: 'Date & Heure',

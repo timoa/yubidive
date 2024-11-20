@@ -187,9 +187,9 @@
             bind:value={status}
             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
           >
-            <option value="ACTIVE">{$_('boats.active')}</option>
-            <option value="INACTIVE">{$_('boats.inactive')}</option>
-            <option value="MAINTENANCE">{$_('boats.maintenance')}</option>
+            <option value="ACTIVE">{$_('common.status.active')}</option>
+            <option value="INACTIVE">{$_('common.status.inactive')}</option>
+            <option value="MAINTENANCE">{$_('common.status.maintenance')}</option>
           </select>
         </div>
 
@@ -250,7 +250,7 @@
                   />
                 </svg>
                 {boat.capacity}
-                {$_('boats.divers')}
+                {$_('common.divers')}
               </div>
               <div class="mt-2 flex items-center text-sm text-gray-500">
                 <svg

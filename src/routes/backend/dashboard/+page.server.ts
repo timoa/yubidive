@@ -8,9 +8,19 @@ export const load: PageServerLoad = async () => {
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(now.getMonth() - 6);
 
-  const [boats, bookings, schedules, bookingsByMonth, bookingsByDay] = await Promise.all([
+  const [boats, bookings, schedules, bookingsByMonth, bookingsByWeek] = await Promise.all([
     // Get all boats
     prisma.boat.findMany({
+      select: {
+        id: true,
+        name: true,
+        status: true,
+        schedules: {
+          select: {
+            id: true
+          }
+        }
+      },
       where: {
         schedules: {
           some: {}
@@ -60,13 +70,13 @@ export const load: PageServerLoad = async () => {
       ORDER BY month
     `,
 
-    // Get bookings by day of week
+    // Get bookings by week
     prisma.$queryRaw`
-      SELECT strftime('%w', "createdAt") as day, COUNT(*) as count
+      SELECT strftime('%W', "createdAt") as week, COUNT(*) as count
       FROM "Booking"
       WHERE "createdAt" >= ${sixMonthsAgo.toISOString()}
-      GROUP BY strftime('%w', "createdAt")
-      ORDER BY day
+      GROUP BY strftime('%W', "createdAt")
+      ORDER BY week
     `
   ]);
 
@@ -92,25 +102,25 @@ export const load: PageServerLoad = async () => {
     processedBookingsByMonth[parseInt(row.month) - 1] = Number(row.count);
   });
 
-  const bookingsByDayData = new Array(7).fill(0);
+  const bookingsByWeekData = new Array(53).fill(0); // 53 weeks in a year
   // @ts-ignore - Raw query type
-  bookingsByDay.forEach((row) => {
-    bookingsByDayData[parseInt(row.day)] = Number(row.count);
+  bookingsByWeek.forEach((row) => {
+    bookingsByWeekData[parseInt(row.week)] = Number(row.count);
   });
 
   return {
     stats: {
       totalBoats: boats.length,
-      activeBoats: boats.length,
+      activeBoats: boats.filter((boat) => boat.status === 'ACTIVE').length,
       totalBookings: bookings.length,
       upcomingBookings: schedules.reduce((acc, schedule) => acc + schedule.bookings.length, 0),
       bookingsOverTime: {
-        labels: Array.from({ length: 12 }, (_, i) => i),
+        labels: processedBookingsByMonth.map((_, index) => index),
         data: processedBookingsByMonth
       },
-      bookingsByDay: {
-        labels: Array.from({ length: 7 }, (_, i) => i),
-        data: bookingsByDayData
+      bookingsByWeek: {
+        labels: bookingsByWeekData.map((_, index) => `Week ${index + 1}`),
+        data: bookingsByWeekData
       },
       upcomingSchedules: schedules.map((schedule) => ({
         id: schedule.id,
