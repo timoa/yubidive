@@ -249,7 +249,7 @@ export default {
       signUpLink: 'Sign up',
       welcomeBack: 'Welcome back!',
       welcomeText:
-        'Sign in to access your diving logs, track your progress, and continue your underwater journey with YubiDive.',
+        'Sign in to book  your next scuba diving adventure, and continue your underwater journey with YubiDive.',
       genericError: 'An error occurred while signing in',
       emailRequired: 'Email address is required',
       invalidEmail: 'Invalid email format',

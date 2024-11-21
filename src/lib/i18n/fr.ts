@@ -87,7 +87,7 @@ export default {
     deleteConfirmation: 'Êtes-vous sûr de vouloir supprimer ce bateau ?',
     availableBoats: 'Bateaux disponibles',
     noBoatsAvailable: 'Aucun bateau disponible',
-    checkBackLater: 'Revenez plus tard pour voir les bateaux et horaires disponibles.',
+    checkBackLater: 'Revenez plus tard pour voir les bateaux et sorties disponibles.',
     boatList: 'Liste des bateaux',
     actions: 'Actions',
     imageUrl: "URL de l'image",
@@ -270,7 +270,7 @@ export default {
       signUpLink: "S'inscrire",
       welcomeBack: 'Bon retour !',
       welcomeText:
-        'Connectez-vous pour accéder à vos journaux de plongée, suivre vos progrès et continuer votre voyage sous-marin avec YubiDive.',
+        'Connectez-vous pour accéder à vos sorties en bateau de plongée, suivre vos progrès et continuer votre voyage sous-marin avec YubiDive.',
       genericError: 'Une erreur est survenue lors de la connexion',
       emailRequired: "L'adresse e-mail est requise",
       invalidEmail: "Format d'adresse e-mail invalide",

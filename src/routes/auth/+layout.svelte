@@ -7,7 +7,7 @@
 <div class="auth-layout fixed inset-0 min-h-screen">
   <div
     class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-    style="background-image: url('https://images.unsplash.com/photo-1682687982501-1e58ab814714');"
+    style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5');"
   >
     <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm" />
   </div>
