@@ -39,8 +39,8 @@ importers:
         specifier: ^0.47.3
         version: 0.47.3(rollup@4.27.2)(svelte@5.2.2)
       pocketbase:
-        specifier: ^0.21.5
-        version: 0.21.5
+        specifier: ^0.22.0
+        version: 0.22.1
       svelte-calendar:
         specifier: ^3.1.6
         version: 3.1.6
@@ -2462,8 +2462,8 @@ packages:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
 
-  pocketbase@0.21.5:
-    resolution: {integrity: sha512-bnI/uinnQps+ElSlzxkc4yvwuSFfKcoszDtXH/4QT2FhGq2mJVUvDlxn+rjRXVntUjPfmMG5LEPZ1eGqV6ssog==}
+  pocketbase@0.22.1:
+    resolution: {integrity: sha512-hnzpDcIx5kbkUJXz6IkiTox6R4nb706u4rPSMy2FYCaI2OqBnFxbY0qwWBSqx1ERz/Xi61Uguf17Gb9bWZ8+kw==}
 
   postcss-import@15.1.0:
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
@@ -5490,7 +5490,7 @@ snapshots:
 
   pirates@4.0.6: {}
 
-  pocketbase@0.21.5: {}
+  pocketbase@0.22.1: {}
 
   postcss-import@15.1.0(postcss@8.4.49):
     dependencies:
