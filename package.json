@@ -61,7 +61,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "flowbite-svelte": "^0.47.3",
-    "pocketbase": "^0.21.5",
+    "pocketbase": "^0.22.0",
     "svelte-calendar": "^3.1.6",
     "svelte-chartjs": "^3.1.5",
     "svelte-i18n": "^4.0.1"
