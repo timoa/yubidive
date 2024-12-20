@@ -1,0 +1,44 @@
+# YubiDive
+
+This project is a project that help scuba diving clubs manage their bookings and schedules.
+
+## Features
+
+### For members
+
+- Bookings dives on specific dates and boats
+
+### For Diving clubs and centers
+
+- Manage schedules
+- Manage boats
+- Manage members
+- Manage bookings
+
+## Tech Stack
+
+- Svelte 5 & SvelteKit 5 for the frontend
+- TailwindCSS 3.4 for the styling
+- Shadcn UI Svelte for the UI components
+- Prisma 5 for the database
+- SQLite for the database
+- Cloudflare Pages for the hosting (frontend and backend)
+
+## Routes
+
+The routes are structured as follows:
+
+- `/` for the frontend
+- `/auth` for the authentication (login, signup, forgot password)
+- `/members` for the members (booking, profile, dashboard)
+- `/backend` for the backend (boats, schedules, members, bookings)
+
+## Internalization
+
+- The app is using Svelte-i18n for the internalization.
+- The `en` locale is used by default.
+
+## Packages
+
+- PNPM as a package manager
+- Shadcn UI Svelte is using the `shadcn-svelte@next` package version to be compatible with Svelte 5
